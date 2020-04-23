@@ -1,0 +1,40 @@
+body{
+    background-color: #e2e2e2;
+}
+.container{
+    margin: 0 0;
+}
+.content-container{
+    background-color: white;
+    margin: 30px;
+}
+.row{
+    padding: 5px;
+}
+.list-info{
+    font-size: 12px;
+    color: #ccc;
+    line-height: 200%;
+}
+.list-title{
+    /*color: #0b2e13;*/
+   color:  #4d5256;
+}
+.list-title:hover{
+    color:  #4d5256;
+}
+.list-body{
+    margin: 5px;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #0b2e13;
+    background-color: #e2e2e2;
+    border-color: #e2e2e2;
+}
+.page-link,.page-link:hover {
+    z-index: 3;
+    color: #0b2e13;
+    border-color: #e2e2e2;
+}

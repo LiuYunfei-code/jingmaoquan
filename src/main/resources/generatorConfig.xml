@@ -7,6 +7,8 @@
     <classPathEntry location="D:\mavenRepo\mysql\mysql-connector-java\5.1.48\mysql-connector-java-5.1.48.jar" />
 
     <context id="Tables" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
+
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://192.168.61.137:3306/jmq?serverTimezone=GMT"
                         userId="root"
@@ -29,6 +31,7 @@
         </javaClientGenerator>
 
         <table schema="jmq" tableName="user_info" domainObjectName="UserInfo" ></table>
+        <table schema="jmq" tableName="question" domainObjectName="Question" ></table>
 
     </context>
 </generatorConfiguration>

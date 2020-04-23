@@ -32,6 +32,7 @@ public class LoginController {
 
     /**
      * 登录
+     *
      * @param username
      * @param password
      * @param request
@@ -70,9 +71,25 @@ public class LoginController {
             cookie.setMaxAge(60 * 60 * 24 * 30); // 一个月
             response.addCookie(cookie);
 
-            return "index";
+            return "redirect:/";
 
         }
+    }
+
+    /**
+     * 退出登录
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
+
     }
 
     /**
