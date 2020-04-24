@@ -18,8 +18,8 @@ import java.util.UUID;
 public class COSProvider {
     final Logger logger = LoggerFactory.getLogger(getClass());
     // 1 初始化用户身份信息（secretId, secretKey）。
-    private String secretId = "AKIDe4FsEYFTJuM5aaqmzf5FApFvNQEq7S6D";
-    private String secretKey = "0lHXhcP3Sm3xnNq441iAWekbpGBQP8fw";
+    private String secretId = "";
+    private String secretKey = "";
     private COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
     // 2 设置 bucket 的区域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
 //   clientConfig 中包含了设置 region, https(默认 http), 超时, 代理等 set 方法, 使用可参见源码或者常见问题 Java SDK 部分。
