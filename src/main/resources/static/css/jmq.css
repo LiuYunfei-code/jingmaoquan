@@ -1,12 +1,18 @@
 body{
     background-color: #e2e2e2;
 }
+hr{
+    margin: 5px;
+}
 .container{
     margin: 0 0;
 }
 .content-container{
     background-color: white;
     margin: 30px;
+}
+.mobile-content-container{
+    background-color: white;
 }
 .row{
     padding: 5px;
@@ -37,4 +43,16 @@ body{
     z-index: 3;
     color: #0b2e13;
     border-color: #e2e2e2;
+}
+
+.search-input{
+    height: 30px;
+}
+.search-button{
+    padding-left: 0;
+}
+.question-info{
+    font-size: 15px;
+    color: #999;
+    line-height: 200%;
 }

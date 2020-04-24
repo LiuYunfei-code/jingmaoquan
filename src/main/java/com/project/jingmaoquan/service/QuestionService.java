@@ -10,4 +10,14 @@ import java.util.List;
 @Service
 public interface QuestionService {
     PaginationDTO<QuestionDTO> list(Integer page, Integer size);
+
+    QuestionDTO findById(Long questionId);
+
+    /**
+     * 增加阅读数
+     * @param questionId
+     */
+    void incView(Long questionId);
+
+    void create(String title, String content, Long publisherId);
 }
