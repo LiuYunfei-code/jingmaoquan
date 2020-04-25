@@ -19,13 +19,13 @@ import java.io.File;
 import java.util.UUID;
 
 @Component
-//@PropertySource(value = "cos.properties")
+@PropertySource("classpath:cos.properties")
 public class COSProvider {
     final Logger logger = LoggerFactory.getLogger(getClass());
     // 1 初始化用户身份信息（secretId, secretKey）。
-//    @Value("cos.SecretId")
+//    @Value("${SecretId}")
     private String secretId="";
-//    @Value("cos.SecretKey")
+//    @Value("${SecretKey}")
     private String secretKey="";
     private COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
     // 2 设置 bucket 的区域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224

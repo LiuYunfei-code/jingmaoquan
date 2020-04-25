@@ -69,4 +69,5 @@ public class QuestionController {
         questionService.create(title,content,publisherId);
         return "redirect:/";
     }
+
 }

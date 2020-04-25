@@ -42,6 +42,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         int offset = size * (page - 1);
         QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("publish_time desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
 
         // 将用户名和question拼接
@@ -108,6 +109,8 @@ public class QuestionServiceImpl implements QuestionService {
         question.setContent(content);
         question.setPublisherId(publisherId);
         question.setPublishTime(System.currentTimeMillis());
+        question.setCommentCount(0);
+        question.setViewCount(0);
         // 插入数据库
         questionMapper.insert(question);
 
