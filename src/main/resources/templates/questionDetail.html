@@ -90,7 +90,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
                 <h2 th:text="${question.getTitle()}"></h2>
                 <span class="question-info">发布人:<span th:text="${question.getUsername()}"></span>|时间:<span th:text="${#dates.format(question.getPublishTime(),'yyyy-MM-dd HH:mm')}"></span>|浏览量:<span th:text="${question.getViewCount()}"></span></span>
-<!--                <hr id="partOfLeftAndRight">-->
+                <hr>
                 <div th:utext="${question.getContent()}" class="ck-content">
                 </div>
 <!--                评论-->

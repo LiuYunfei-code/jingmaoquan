@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -77,8 +78,11 @@ public class LoginServiceImpl implements LoginService {
         String PWDHash = DigestUtils.md5DigestAsHex(bytes);
         // 验证密码
         if (PWDHash.equals(userInfo.getPassword())) {// 登录成功
-            String token = UUID.randomUUID().toString();
-            userInfo.setToken(token);
+            // 如果 token 为空
+            if (StringUtils.isEmpty(userInfo.getToken())) {
+                String token = UUID.randomUUID().toString();
+                userInfo.setToken(token);
+            }
             userInfoMapper.updateByExample(userInfo,userInfoExample);
             return userInfo;
         }else { // 密码不匹配
