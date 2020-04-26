@@ -5,6 +5,36 @@ public class CommentCreateDTO {
     private Integer type;
     private String content;
     private Integer parentType; // 1-讨论帖 2-二手贴 3-任务贴
+    private String parentUsername;
+    private String parentContent;
+
+    @Override
+    public String toString() {
+        return "CommentCreateDTO{" +
+                "parentId=" + parentId +
+                ", type=" + type +
+                ", content='" + content + '\'' +
+                ", parentType=" + parentType +
+                ", parentUsername='" + parentUsername + '\'' +
+                ", parentContent='" + parentContent + '\'' +
+                '}';
+    }
+
+    public String getParentUsername() {
+        return parentUsername;
+    }
+
+    public void setParentUsername(String parentUsername) {
+        this.parentUsername = parentUsername;
+    }
+
+    public String getParentContent() {
+        return parentContent;
+    }
+
+    public void setParentContent(String parentContent) {
+        this.parentContent = parentContent;
+    }
 
     public String getContent() {
         return content;

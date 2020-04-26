@@ -17,26 +17,29 @@ import java.util.Map;
 
 @Controller
 public class CommentController {
-    final Logger logger= LoggerFactory.getLogger(getClass());
+    final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private CommentService commentService;
 
     @RequestMapping(value = "comment", method = RequestMethod.POST)
     @ResponseBody
     public Object comment(@RequestBody CommentCreateDTO commentCreateDTO,
-                                       HttpServletRequest request) {
+                          HttpServletRequest request) {
 
 
         // 检查评论内容是否为空
-        if (commentCreateDTO==null || StringUtils.isEmpty(commentCreateDTO.getContent())){
+        if (commentCreateDTO == null || StringUtils.isEmpty(commentCreateDTO.getContent())) {
 
+        } else {
+            // 获取评论者 ID
+            UserInfo userInfo = (UserInfo) request.getSession().getAttribute("user");
+            Long userId = userInfo.getUserId();
+
+            // 保存数据
+            commentService.insert(commentCreateDTO, userId);
+
+//            logger.info(commentCreateDTO.toString());
         }
-        // 获取评论者 ID
-        UserInfo userInfo= (UserInfo) request.getSession().getAttribute("user");
-        Long userId=userInfo.getUserId();
-
-        // 保存数据
-        commentService.insert(commentCreateDTO,userId);
 
         return ResultDTO.okOf();
 

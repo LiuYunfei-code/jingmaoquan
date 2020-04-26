@@ -16,6 +16,24 @@ public class CommentDTO {
     private String username;
 
     private String photo;
+    private String parentUsername;
+    private String parentContent;
+
+    public String getParentUsername() {
+        return parentUsername;
+    }
+
+    public void setParentUsername(String parentUsername) {
+        this.parentUsername = parentUsername;
+    }
+
+    public String getParentContent() {
+        return parentContent;
+    }
+
+    public void setParentContent(String parentContent) {
+        this.parentContent = parentContent;
+    }
 
     public Long getId() {
         return id;

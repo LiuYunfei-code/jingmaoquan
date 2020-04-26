@@ -101,6 +101,12 @@ public class QuestionServiceImpl implements QuestionService {
         questionExtMapper.incView(questionId);
     }
 
+    /**
+     * 发布讨论帖
+     * @param title
+     * @param content
+     * @param publisherId
+     */
     @Override
     public void create(String title, String content, Long publisherId) {
         // 创建 question 对象

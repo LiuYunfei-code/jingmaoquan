@@ -25,6 +25,7 @@
             <h1>用户登录</h1>
             <form action="/login" method="post">
 
+                <input name="url" style="display: none" th:value="${url!=null?url:''}">
                 <div class="form-group">
                     <label for="username">用户名</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="输入用户名">

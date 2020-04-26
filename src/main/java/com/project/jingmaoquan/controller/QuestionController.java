@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -85,7 +86,21 @@ public class QuestionController {
     public String publish(@RequestParam("content")String content,
                           @RequestParam("title")String title,
                           @RequestParam(value = "id",required = false)Long questionId,
-                          HttpServletRequest request){
+                          HttpServletRequest request,Model model){
+        // 判断非空
+        if (StringUtils.isEmpty(title)||StringUtils.isEmpty(content)){
+            Question question=new Question();
+            question.setTitle(title);
+            question.setContent(content);
+            if (questionId!=null){
+                question.setQuestionId(questionId);
+            }
+            model.addAttribute("question",question);
+            model.addAttribute("error","标题或正文不能为空");
+            return "publishQuestion";
+
+        }
+
         if (questionId!=null){ // 编辑
             questionService.update(questionId,title,content);
         }else { // 发布新帖

@@ -44,7 +44,48 @@ function questionComment() {
         },
         dataType: "json"
     });
+}
+function subComment(e) {
+
+    let id=e.getAttribute("data-id");
+    let parentId = $(" #parentId ").val();
+    let parentType=1;
+    let commentContent=$(" #sub-comment-"+id).val();
+    let type=1;
+    let parentUsername=e.getAttribute("data-parent-username");
+    let parentContent=e.getAttribute("data-parent-comment-content");
 
 
+    if (!commentContent) {
+        alert("请输入评论内容！");
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/comment",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "parentId": parentId,
+            "type": type,
+            "content": commentContent,
+            "parentType":parentType,
+            "parentUsername":parentUsername,
+            "parentContent":parentContent
+        }),
+        success: function (response) {
+            console.log(response);
+            if (response.code == 200) {
+                window.location.reload();
+                // alert(response.message);
 
+                // debugger;
+                $(" #comment-content ").val("");
+                // $(" #sub-comment-content ").val("");
+                // appendToTarget(parentId, type)
+            } else {
+                alert("提交失败")
+            }
+        },
+        dataType: "json"
+    });
 }

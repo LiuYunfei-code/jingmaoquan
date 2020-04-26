@@ -17,7 +17,7 @@
 <body>
 <!--导航栏-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light" >
-    <a class="navbar-brand" href="#">经贸圈</a>
+    <a class="navbar-brand" href="/">经贸圈</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -46,6 +46,10 @@
         <!--        已登录-->
         <div class="btn-group" style="margin: 5px">
             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${session.user!=null}">
+                <svg class="bi bi-pencil-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd"/>
+                </svg>
                 发帖
             </button>
             <div class="dropdown-menu">
@@ -81,7 +85,7 @@
 </nav>
 <!--导航栏 END-->
 
-<div class="content-container" style="border-radius: 3px">
+<div class="content-container" id="content-container" style="border-radius: 3px">
     <!--文章列表-->
     <div class="container">
         <div class="row">
@@ -91,7 +95,7 @@
                     <li class="media list-body" >
                         <img src="/image/avatar.png" class="mr-3 list-title-img rounded" alt="...">
                         <div class="media-body">
-                            <h5 class="mt-0 mb-1"><a class="list-title" th:href="'/question?id='+${question.getQuestionId()}" th:text="${question.getTitle()}"></a></h5>
+                            <h5 class="mt-0 mb-1"><a class="list-title" target="_blank" th:href="'/question?id='+${question.getQuestionId()}" th:text="${question.getTitle()}"></a></h5>
                             <span class="list-info"><span
                                     style="color: #4d5256;font-weight: bold;" th:text="${question.getUsername()}"></span>
                                 <!-- <span class="badge badge-info">17级</span>-->  •  <span th:text="${#dates.format(question.publishTime,'yyyy-MM-dd HH:mm')}"></span>  •  浏览量：<span th:text="${question.getViewCount()}"></span></span>
@@ -146,6 +150,24 @@
     </div>
 
 </div>
-
+<p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Link with href
+    </a>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Button with data-target
+    </button>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+    </div>
+</div>
+<script>
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+        // Take the user to a different screen here.
+        document.getElementById("content-container").className = "mobile-content-container";
+    }
+</script>
 </body>
 </html>

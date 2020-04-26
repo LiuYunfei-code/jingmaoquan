@@ -22,17 +22,22 @@ public class LoginController {
 
     /**
      * 跳转登录界面
-     *
+     * @param type
+     * @param questionId
+     * @param model
      * @return
      */
     @GetMapping("loginPage")
-    public String loginPage() {
+    public String loginPage(@RequestParam(value = "type",required = false)Integer type,
+                            @RequestParam(value = "id",required = false)Long questionId,Model model) {
+        if (type!=null&&type==1){// 讨论帖
+            model.addAttribute("url","/question?id="+questionId);
+        }
         return "loginPage";
     }
 
     /**
      * 登录
-     *
      * @param username
      * @param password
      * @param request
@@ -43,12 +48,14 @@ public class LoginController {
     @PostMapping("login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
+                        @RequestParam(value = "url",required = false)String url,
                         HttpServletRequest request,
                         HttpServletResponse response,
                         Model model) {
 
         model.addAttribute("username", username);
         model.addAttribute("password", password);
+        model.addAttribute("user",url);
 
         if (StringUtils.isEmpty(username)) {
             model.addAttribute("error", "用户名不能为空");
@@ -71,7 +78,11 @@ public class LoginController {
             cookie.setMaxAge(60 * 60 * 24 * 30); // 一个月
             response.addCookie(cookie);
 
-            return "redirect:/";
+            if (!StringUtils.isEmpty(url)){
+                return "redirect:"+url;
+            }else {
+                return "redirect:/";
+            }
 
         }
     }

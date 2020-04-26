@@ -5,10 +5,7 @@ import com.project.jingmaoquan.dto.CommentDTO;
 import com.project.jingmaoquan.mapper.CommentMapper;
 import com.project.jingmaoquan.mapper.QuestionExtMapper;
 import com.project.jingmaoquan.mapper.UserInfoMapper;
-import com.project.jingmaoquan.model.Comment;
-import com.project.jingmaoquan.model.CommentExample;
-import com.project.jingmaoquan.model.UserInfo;
-import com.project.jingmaoquan.model.UserInfoExample;
+import com.project.jingmaoquan.model.*;
 import com.project.jingmaoquan.service.CommentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +30,15 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void insert(CommentCreateDTO commentCreateDTO, Long userId) {
         // 创建 comment 对象
-        Comment comment = new Comment();
+        CommentWithBLOBs comment = new CommentWithBLOBs();
         comment.setCommentatorId(userId);
         comment.setContent(commentCreateDTO.getContent());
         comment.setCreateTime(System.currentTimeMillis());
         comment.setParentId(commentCreateDTO.getParentId());
         comment.setType(commentCreateDTO.getType());
         comment.setParentType(commentCreateDTO.getParentType());
+        comment.setParentUsername(commentCreateDTO.getParentUsername());
+        comment.setParentContent(commentCreateDTO.getParentContent());
         // 保存数据
         commentMapper.insert(comment);
         // 将相应帖子的评论数加一
@@ -61,18 +60,21 @@ public class CommentServiceImpl implements CommentService {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(questionId).andParentTypeEqualTo(parentType);
         commentExample.setOrderByClause("create_time desc");
-        List<Comment> comments = commentMapper.selectByExampleWithBLOBs(commentExample);
+        List<CommentWithBLOBs> comments = commentMapper.selectByExampleWithBLOBs(commentExample);
         // 查询评论人信息，并生成commentDTO 列表
         List<CommentDTO> commentDTOS = new ArrayList<>();
         UserInfoExample userInfoExample = new UserInfoExample();
-        for (Comment comment : comments) {
+        for (CommentWithBLOBs comment : comments) {
             userInfoExample.createCriteria().andUserIdEqualTo(comment.getCommentatorId());
             List<UserInfo> userInfos = userInfoMapper.selectByExample(userInfoExample);
             CommentDTO commentDTO = new CommentDTO();
             BeanUtils.copyProperties(comment, commentDTO);
-            commentDTO.setPhoto(userInfos.get(0).getPhoto());
-            commentDTO.setUsername(userInfos.get(0).getUsername());
+            commentDTO.setPhoto(userInfos.get(0).getPhoto()); // 头像
+            commentDTO.setUsername(userInfos.get(0).getUsername()); // 用户名
+            commentDTO.setParentUsername(comment.getParentUsername()); // 被回复评论的用户名
+            commentDTO.setParentContent(comment.getParentContent()); // 被回复评论的内容
             commentDTOS.add(commentDTO);
+
         }
 
         return commentDTOS;

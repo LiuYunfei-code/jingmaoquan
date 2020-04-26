@@ -90,7 +90,7 @@
 </nav>
 <!--导航栏 END-->
 
-<div class="content-container">
+<div class="content-container" id="content-container">
     <!--    文章主体-->
     <div class="container">
         <div class="row">
@@ -98,7 +98,7 @@
 
                 <form action="/question/publish" method="post" enctype="multipart/form-data">
 <!--                    question id-->
-                    <input name="id" th:value="${question.getQuestionId()}" type="text" style="display: none;">
+                    <input name="id" th:value="${question!=null?question.getQuestionId():''}" type="text" style="display: none;">
                     <!--                    标题-->
                     <div class="form-group">
                         <label for="question-title">标题</label>
@@ -108,9 +108,12 @@
                     <div class="form-group">
 
                         <label for="editor">正文</label>
-                        <textarea name="content" id="editor" th:text="${question.getContent()}"></textarea>
+                        <textarea name="content" id="editor"  th:text="${question!=null?question.getContent():''}"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-success">发布</button>
+                    <button type="submit" class="btn btn-success" style="float: right">发布</button>
+                    <div class="alert alert-danger" role="alert" style="float: right;margin-right: 20px;" th:if="${error!=null}">
+                        <span th:text="${error}"></span>
+                    </div>
                 </form>
             </div>
             <!--            右侧栏-->
@@ -246,6 +249,12 @@
         .catch(error => {
             console.error(error);
         });
+</script>
+<script>
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+        // Take the user to a different screen here.
+        document.getElementById("content-container").className = "mobile-content-container";
+    }
 </script>
 </body>
 </html>
