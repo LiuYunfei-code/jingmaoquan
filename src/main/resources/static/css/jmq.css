@@ -56,3 +56,15 @@ hr{
     color: #999;
     line-height: 200%;
 }
+
+/*评论区*/
+.comment-info{
+    margin-bottom: 0px;
+}
+.comment-content{
+    margin-top: 2px;
+}
+/*帖子内容*/
+/*.ck-content{*/
+/*    margin: 0 15px;*/
+/*}*/

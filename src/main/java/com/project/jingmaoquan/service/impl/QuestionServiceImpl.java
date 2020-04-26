@@ -115,4 +115,22 @@ public class QuestionServiceImpl implements QuestionService {
         questionMapper.insert(question);
 
     }
+
+    /**
+     * 编辑帖子
+     * @param questionId
+     * @param title
+     * @param content
+     */
+    @Override
+    public void update(Long questionId, String title, String content) {
+        QuestionExample questionExample=new QuestionExample();
+        questionExample.createCriteria().andQuestionIdEqualTo(questionId);
+
+        Question question=new Question();
+        question.setTitle(title);
+        question.setContent(content);
+
+        questionMapper.updateByExampleSelective(question,questionExample);
+    }
 }

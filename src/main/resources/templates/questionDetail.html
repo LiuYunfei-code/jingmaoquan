@@ -15,7 +15,6 @@
     <script src="/js/jmq.js" type="text/javascript"></script>
 
 
-
 </head>
 <body>
 
@@ -98,16 +97,31 @@
     <div class="container">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
-                <h2 th:text="${question.getTitle()}"></h2>
-                <span class="question-info">发布人:<span th:text="${question.getUsername()}"></span>|时间:<span
-                        th:text="${#dates.format(question.getPublishTime(),'yyyy-MM-dd HH:mm')}"></span>|浏览量:<span
-                        th:text="${question.getViewCount()}"></span></span>
+                <!--帖子信息-->
+                <div>
+                    <h2 th:text="${question.getTitle()}"></h2>
+                    <span class="question-info">发布人:<span th:text="${question.getUsername()}"></span>|时间:<span
+                            th:text="${#dates.format(question.getPublishTime(),'yyyy-MM-dd HH:mm')}"></span>|浏览量:<span
+                            th:text="${question.getViewCount()}"></span></span>
+                    <a th:if="${question.getPublisherId()==session.user.getUserId()}" th:href="'/question/publishPage?id='+${question.getQuestionId()}" >编辑</a>
+                </div>
                 <hr>
                 <div th:utext="${question.getContent()}" class="ck-content">
                 </div>
                 <!--评论-->
                 <hr>
                 <h3>评论</h3>
+                <div class="media" th:each="comment:${comments}">
+                    <img th:src="${comment.getPhoto()}" class="mr-3 rounded" width="50px" height="50px">
+                    <div class="media-body">
+                        <p class="mt-0 comment-info">
+                            <span style="font-weight: bold;color: gray" th:text="${comment.getUsername()}"></span>&nbsp;&nbsp;
+                            <span style="font-size: 12px;color: #999;line-height: 200%;"
+                                  th:text="${#dates.format(comment.getCreateTime(),'yyyy-MM-dd HH:mm')}"></span>
+                        </p>
+                        <p class="comment-content" th:text="${comment.getContent()}"></p>
+                    </div>
+                </div>
                 <!--添加评论-->
                 <h3>添加评论</h3>
 

@@ -20,4 +20,6 @@ public interface QuestionService {
     void incView(Long questionId);
 
     void create(String title, String content, Long publisherId);
+
+    void update(Long questionId, String title, String content);
 }
