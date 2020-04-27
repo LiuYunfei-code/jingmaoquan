@@ -22,4 +22,6 @@ public interface QuestionService {
     void create(String title, String content, Long publisherId);
 
     void update(Long questionId, String title, String content);
+
+    PaginationDTO<Question> listByPublisherId(Long userId, Integer page, Integer size);
 }

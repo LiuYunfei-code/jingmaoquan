@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>讨论区</title>
+    <title>个人中心</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -26,7 +26,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">讨论区 </a>
+                <a class="nav-link" href="/">讨论区 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">二手区</a>
@@ -34,14 +34,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">任务区</a>
             </li>
-<!--         搜索-->
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2 search-input" type="search" placeholder="搜索讨论帖" aria-label="Search">
-                <button class="btn my-2 my-sm-0 search-button" type="submit"><svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
-                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
-                </svg></button>
-            </form>
+<!--            &lt;!&ndash;         搜索&ndash;&gt;-->
+<!--            <form class="form-inline my-2 my-lg-0">-->
+<!--                <input class="form-control mr-sm-2 search-input" type="search" placeholder="搜索讨论帖" aria-label="Search">-->
+<!--                <button class="btn my-2 my-sm-0 search-button" type="submit"><svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+<!--                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>-->
+<!--                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>-->
+<!--                </svg></button>-->
+<!--            </form>-->
         </ul>
         <!--        已登录-->
         <div class="btn-group" style="margin: 5px">
@@ -64,7 +64,7 @@
                 <span th:text="${session.user.getUsername()}"></span>
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="/profile">个人中心</a>
+                <a class="dropdown-item" href="#">个人中心</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/logout">退出登录</a>
             </div>
@@ -87,63 +87,64 @@
 
 <div class="content-container" id="content-container" style="border-radius: 3px">
     <!--文章列表-->
-    <div class="container">
+    <div class="container-fluid ">
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
-                <ul class="list-unstyled">
-                    <div th:each="question : ${pagination.data}">
-                    <li class="media list-body" >
-                        <img src="/image/avatar.png" class="mr-3 list-title-img rounded" alt="...">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9" style="border-right:solid 1px #EFEFEF ">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="question:${pagination.getData()}">
                         <div class="media-body">
                             <h5 class="mt-0 mb-1"><a class="list-title" target="_blank" th:href="'/question?id='+${question.getQuestionId()}" th:text="${question.getTitle()}"></a></h5>
-                            <span class="list-info"><span
-                                    style="color: #4d5256;font-weight: bold;" th:text="${question.getUsername()}"></span>
-                                <!-- <span class="badge badge-info">17级</span>-->  •  <span th:text="${#dates.format(question.publishTime,'yyyy-MM-dd HH:mm')}"></span>  •  浏览量：<span th:text="${question.getViewCount()}"></span></span>
+                            <span class="list-info"><span  th:text="${#dates.format(question.publishTime,'yyyy-MM-dd HH:mm')}"></span>  •  浏览量：<span th:text="${question.getViewCount()}"></span></span>
+                            <span style="float: right">删除</span>
                         </div>
 
                     </li>
-                    <hr>
-                    </div>
-
-
                 </ul>
-                <!--分页-->
+<!--                分页-->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-<!--                        第一页-->
+                        <!--                        第一页-->
                         <li class="page-item" th:if="${pagination.showFirstPage}">
-                            <a class="page-link" th:href="@{/(page=${1})}" aria-label="Previous">
+                            <a class="page-link" th:href="'/profile?section='+${section}" aria-label="Previous">
                                 <span aria-hidden="true">&lt;&lt;</span>
                             </a>
                         </li>
-<!--                        上一页-->
+                        <!--                        上一页-->
                         <li class="page-item" th:if="${pagination.showPrevious}">
-                            <a class="page-link" th:href="@{/(page=${pagination.page - 1})}" aria-label="Previous">
+                            <a class="page-link" th:href="'/profile?section='+${section}+'&page='+${pagination.page - 1}" aria-label="Previous">
                                 <span aria-hidden="true">&lt;</span>
                             </a>
                         </li>
-<!--                        各个页数-->
-                        <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}? 'page-item active' : ''"><a class="page-link" th:href="@{/(page=${page})}" th:text="${page}">1</a></li>
+                        <!--                        各个页数-->
+                        <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}? 'page-item active' : ''"><a class="page-link" th:href="'/profile?section='+${section}+'&page='+${page}" th:text="${page}">1</a></li>
 
 
-<!--                        下一页-->
+                        <!--                        下一页-->
                         <li class="page-item" th:if="${pagination.showNext}">
-                            <a class="page-link" th:href="@{/(page=${pagination.page + 1})}" aria-label="Next">
+                            <a class="page-link" th:href="'/profile?section='+${section}+'&page='+${pagination.page + 1}" aria-label="Next">
                                 <span aria-hidden="true">&gt;</span>
                             </a>
                         </li>
-<!--                        最后一页-->
-                        <li class="page-item" th:if="${pagination.showNext}">
-                            <a class="page-link" th:href="@{/(page=${pagination.totalPage})}" aria-label="Next">
+                        <!--                        最后一页-->
+                        <li th:if="${pagination.showEndPage}">
+                            <a th:href="'/profile?section='+${section}+'&page='+${pagination.totalPage}"  aria-label="Next">
                                 <span aria-hidden="true">&gt;&gt;</span>
                             </a>
                         </li>
                     </ul>
                 </nav>
             </div>
-<!--            右侧栏-->
-            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                right
+            <!--            右侧栏-->
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action ">
+                        Cras justo odio
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action active">我的讨论帖</a>
+                    <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+                    <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+                    <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">Vestibulum at eros</a>
+                </div>
             </div>
         </div>
 

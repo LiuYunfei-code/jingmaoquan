@@ -68,6 +68,26 @@ public class QuestionServiceImpl implements QuestionService {
 
         return paginationDTO;
 
+
+    }
+    @Override
+    public PaginationDTO<Question> listByPublisherId(Long userId, Integer page, Integer size) {
+        int offset = size * (page - 1);
+        // 查询
+        QuestionExample questionExample=new QuestionExample();
+        questionExample.createCriteria().andPublisherIdEqualTo(userId);
+        questionExample.setOrderByClause("publish_time desc");
+        List<Question> questions=questionMapper.selectByExampleWithRowbounds(questionExample,new RowBounds(offset,size));
+
+        PaginationDTO<Question> paginationDTO=new PaginationDTO<>();
+        paginationDTO.setData(questions);
+        // 获取总记录数
+        Long totalCount=questionMapper.countByExample(new QuestionExample());
+        // 设置分页
+        paginationDTO.setPagination(totalCount,page,size);
+
+        return paginationDTO;
+
     }
 
     /**
@@ -139,4 +159,6 @@ public class QuestionServiceImpl implements QuestionService {
 
         questionMapper.updateByExampleSelective(question,questionExample);
     }
+
+
 }

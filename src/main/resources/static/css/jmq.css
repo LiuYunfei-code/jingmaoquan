@@ -22,7 +22,7 @@ a,a:hover{
 }
 .list-info{
     font-size: 12px;
-    color: #ccc;
+    color: #aaa;
     line-height: 200%;
 }
 .list-title{
@@ -79,4 +79,9 @@ a,a:hover{
 /*帖子内容*/
 .ck-content a{
     text-decoration: underline;
+}
+.list-group-item.active{
+    color: #0b2e13;
+    background-color: #ddd;
+    border-color: #ddd;
 }
