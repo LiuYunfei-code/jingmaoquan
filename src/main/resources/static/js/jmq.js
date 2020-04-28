@@ -89,3 +89,28 @@ function subComment(e) {
         dataType: "json"
     });
 }
+// 删除讨论帖
+function deleteQuestion(e) {
+    let id = e.getAttribute("data-id");
+    let curr=document.getElementById("profile-question-"+id);
+
+
+    $.ajax({
+        type: "POST",
+        url: "/question/delete",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": id
+        }),
+        success: function (response) {
+            console.log(response);
+            if (response.code == 200) {
+               curr.parentNode.removeChild(curr);
+            } else {
+                alert("删除失败")
+            }
+        },
+        dataType: "json"
+    });
+
+}

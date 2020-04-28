@@ -24,4 +24,6 @@ public interface QuestionService {
     void update(Long questionId, String title, String content);
 
     PaginationDTO<Question> listByPublisherId(Long userId, Integer page, Integer size);
+
+    void delete(Long questionId);
 }

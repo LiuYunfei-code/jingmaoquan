@@ -70,6 +70,14 @@ public class QuestionServiceImpl implements QuestionService {
 
 
     }
+
+    /**
+     * 获取我的讨论帖列表
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
     @Override
     public PaginationDTO<Question> listByPublisherId(Long userId, Integer page, Integer size) {
         int offset = size * (page - 1);
@@ -88,6 +96,14 @@ public class QuestionServiceImpl implements QuestionService {
 
         return paginationDTO;
 
+    }
+
+    @Override
+    public void delete(Long questionId) {
+        QuestionExample questionExample=new QuestionExample();
+        questionExample.createCriteria().andQuestionIdEqualTo(questionId);
+
+        questionMapper.deleteByExample(questionExample);
     }
 
     /**

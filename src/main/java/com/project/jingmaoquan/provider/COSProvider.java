@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.UUID;
 
 @Component
-@PropertySource("classpath:cos.properties")
 public class COSProvider {
     final Logger logger = LoggerFactory.getLogger(getClass());
     // 1 初始化用户身份信息（secretId, secretKey）。

@@ -1,8 +1,6 @@
 package com.project.jingmaoquan.controller;
 
-import com.project.jingmaoquan.dto.CommentDTO;
-import com.project.jingmaoquan.dto.PaginationDTO;
-import com.project.jingmaoquan.dto.QuestionDTO;
+import com.project.jingmaoquan.dto.*;
 import com.project.jingmaoquan.mapper.QuestionMapper;
 import com.project.jingmaoquan.model.Question;
 import com.project.jingmaoquan.model.QuestionExample;
@@ -15,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -109,6 +106,14 @@ public class QuestionController {
             questionService.create(title, content, publisherId);
         }
         return "redirect:/";
+    }
+
+    @RequestMapping(value = "question/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public Object delete(@RequestBody DeleteDTO deleteDTO){
+
+        questionService.delete(deleteDTO.getId());
+        return ResultDTO.okOf();
     }
 
 }
