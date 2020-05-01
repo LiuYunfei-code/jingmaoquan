@@ -90,61 +90,69 @@
     <div class="container-fluid ">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9" style="border-right:solid 1px #EFEFEF ">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" th:each="question:${pagination.getData()}" th:id="'profile-question-'+${question.getQuestionId()}">
-                        <div class="media-body">
-                            <h5 class="mt-0 mb-1"><a class="list-title" target="_blank" th:href="'/question?id='+${question.getQuestionId()}" th:text="${question.getTitle()}"></a></h5>
-                            <span class="list-info"><span  th:text="${#dates.format(question.publishTime,'yyyy-MM-dd HH:mm')}"></span>  •  浏览量：<span th:text="${question.getViewCount()}"></span></span>
-                            <button class="btn btn-link" style="float: right;margin: 0;padding: 0px;font-size: 15px;color: firebrick;" onclick="deleteQuestion(this)" th:data-id="${question.getQuestionId()}">删除</button>
-                            <a style="float: right;margin-right: 10px;font-size: 15px" th:href="'/question/publishPage?id='+${question.getQuestionId()}" >编辑</a>
+                <ul class="list-group list-group-flush" th:if="${section==1}">
+                    <li class="list-group-item" th:each="notification:${pagination.getData()}" >
+                        <div class="media-body" th:if="${notification.getArticleType()==1}">
+                            <h5 class="mt-0 mb-1"><span th:text="'@'+${notification.getNotifierUsername()}+'  '+${notification.getNotifyDesc()}+'  '"></span><a class="list-title" target="_blank" th:href="'/question?id='+${notification.getArticleId()}+'#comment-'+${notification.getCommentId()}" th:text="${notification.getArticleTitle()}"></a></h5>
+                            <span th:text="${notification.getContent()}" style="font-size: 15px;color: #555"></span><br>
+                            <span class="list-info"><span  th:text="${#dates.format(notification.getCreateTime(),'yyyy-MM-dd HH:mm')}"></span>  </span>
                         </div>
 
                     </li>
                 </ul>
-<!--                分页-->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <!--                        第一页-->
-                        <li class="page-item" th:if="${pagination.showFirstPage}">
-                            <a class="page-link" th:href="'/profile?section='+${section}" aria-label="Previous">
-                                <span aria-hidden="true">&lt;&lt;</span>
-                            </a>
-                        </li>
-                        <!--                        上一页-->
-                        <li class="page-item" th:if="${pagination.showPrevious}">
-                            <a class="page-link" th:href="'/profile?section='+${section}+'&page='+${pagination.page - 1}" aria-label="Previous">
-                                <span aria-hidden="true">&lt;</span>
-                            </a>
-                        </li>
-                        <!--                        各个页数-->
-                        <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}? 'page-item active' : ''"><a class="page-link" th:href="'/profile?section='+${section}+'&page='+${page}" th:text="${page}">1</a></li>
+                <ul class="list-group list-group-flush" th:if="${section==2}">
+                    <li class="list-group-item" th:each="question:${questionPagination.getData()}" th:id="'profile-question-'+${question.getQuestionId()}">
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-1"><a class="list-title" target="_blank" th:href="'/question?id='+${question.getQuestionId()}+'#test'" th:text="${question.getTitle()}"></a></h5>
+                            <span class="list-info"><span  th:text="${#dates.format(question.publishTime,'yyyy-MM-dd HH:mm')}"></span>  •  浏览量：<span th:text="${question.getViewCount()}"></span></span>
+                            <button class="btn btn-link" style="float: right;margin: 0;padding: 0px;font-size: 15px;color: firebrick;" onclick="deleteQuestion(this)" th:data-id="${question.getQuestionId()}">删除</button>
+                            <a style="float: right;margin-right: 10px;font-size: 15px" th:href="'/question/publishPage?id='+${question.getQuestionId()}" >编辑</a>
+                        </div>
+                    </li>
+                </ul>
+                <!--                分页-->
+<!--                <nav aria-label="Page navigation example">-->
+<!--                    <ul class="pagination">-->
+<!--                        &lt;!&ndash;                        第一页&ndash;&gt;-->
+<!--                        <li class="page-item" th:if="${pagination.showFirstPage}">-->
+<!--                            <a class="page-link" th:href="'/profile?section='+${section}" aria-label="Previous">-->
+<!--                                <span aria-hidden="true">&lt;&lt;</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        &lt;!&ndash;                        上一页&ndash;&gt;-->
+<!--                        <li class="page-item" th:if="${pagination.showPrevious}">-->
+<!--                            <a class="page-link" th:href="'/profile?section='+${section}+'&page='+${pagination.page - 1}" aria-label="Previous">-->
+<!--                                <span aria-hidden="true">&lt;</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        &lt;!&ndash;                        各个页数&ndash;&gt;-->
+<!--                        <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}? 'page-item active' : ''"><a class="page-link" th:href="'/profile?section='+${section}+'&page='+${page}" th:text="${page}">1</a></li>-->
 
 
-                        <!--                        下一页-->
-                        <li class="page-item" th:if="${pagination.showNext}">
-                            <a class="page-link" th:href="'/profile?section='+${section}+'&page='+${pagination.page + 1}" aria-label="Next">
-                                <span aria-hidden="true">&gt;</span>
-                            </a>
-                        </li>
-                        <!--                        最后一页-->
-                        <li th:if="${pagination.showEndPage}">
-                            <a th:href="'/profile?section='+${section}+'&page='+${pagination.totalPage}"  aria-label="Next">
-                                <span aria-hidden="true">&gt;&gt;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+<!--                        &lt;!&ndash;                        下一页&ndash;&gt;-->
+<!--                        <li class="page-item" th:if="${pagination.showNext}">-->
+<!--                            <a class="page-link" th:href="'/profile?section='+${section}+'&page='+${pagination.page + 1}" aria-label="Next">-->
+<!--                                <span aria-hidden="true">&gt;</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        &lt;!&ndash;                        最后一页&ndash;&gt;-->
+<!--                        <li th:if="${pagination.showEndPage}">-->
+<!--                            <a th:href="'/profile?section='+${section}+'&page='+${pagination.totalPage}"  aria-label="Next">-->
+<!--                                <span aria-hidden="true">&gt;&gt;</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
             </div>
             <!--            右侧栏-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action ">
-                        Cras justo odio
+                    <a href="/notification?section=1" th:class="${section==1}?'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">
+                        通知
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action active">我的讨论帖</a>
-                    <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-                    <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-                    <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">Vestibulum at eros</a>
+                    <a href="/profile?section=2" th:class="${section==2}?'list-group-item list-group-item-action active':'list-group-item list-group-item-action'" >我的讨论帖</a>
+                    <a href="#" th:class="${section==3}?'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Morbi leo risus</a>
+                    <a href="#" th:class="${section==4}?'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Porta ac consectetur ac</a>
                 </div>
             </div>
         </div>

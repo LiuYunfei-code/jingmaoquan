@@ -1,12 +1,14 @@
 package com.project.jingmaoquan.dto;
 
 public class CommentCreateDTO {
-    private Long parentId;
-    private Integer type;
+    private Long parentId; // 对于一级评论是帖子的 id，对于二级评论的是对应的一级评论的 id
+    private Integer type; // 评论的类型，1-一级评论，2-二级评论
     private String content;
     private Integer parentType; // 1-讨论帖 2-二手贴 3-任务贴
     private String parentUsername;
     private String parentContent;
+    private Long parentUserId; // 被回复人的 id
+    private Long articleId; // 所属帖子的 id
 
     @Override
     public String toString() {
@@ -17,7 +19,24 @@ public class CommentCreateDTO {
                 ", parentType=" + parentType +
                 ", parentUsername='" + parentUsername + '\'' +
                 ", parentContent='" + parentContent + '\'' +
+                ", parentUserId=" + parentUserId +
                 '}';
+    }
+
+    public Long getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(Long articleId) {
+        this.articleId = articleId;
+    }
+
+    public Long getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(Long parentUserId) {
+        this.parentUserId = parentUserId;
     }
 
     public String getParentUsername() {

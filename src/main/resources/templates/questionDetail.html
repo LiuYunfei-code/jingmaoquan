@@ -13,6 +13,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jmq.js" type="text/javascript"></script>
+    <script src="/js/moment.js"></script>
 
 
 </head>
@@ -122,49 +123,61 @@
                 <hr>
                 <h3>评论</h3>
                 <div th:each="comment:${comments}">
-                    <div class="media">
+                    <div class="media" th:id="'comment-'+${comment.getId()}">
                         <img th:src="${comment.getPhoto()}" class="mr-3 rounded" width="45px" height="45px">
                         <div class="media-body">
                             <p class="mt-0 comment-info">
-                                <span  style="font-weight: bold;color: gray"
+                                <span style="font-weight: bold;color: gray"
                                       th:text="${comment.getUsername()}"></span>&nbsp;&nbsp;
                                 <span style="font-size: 12px;color: #999;line-height: 200%;"
                                       th:text="${#dates.format(comment.getCreateTime(),'yyyy-MM-dd HH:mm')}"></span>
                             </p>
-<!--                          被回复的内容  -->
-                            <blockquote class="origin-comment" th:if="${comment.getParentUsername()!=null}">
-                                <i style="color: gray;font-size: 15px;">回复 @<span th:text="${comment.getParentUsername()}"></span></i><br>
-                                <i><span th:text="${comment.getParentContent()}"></span></i>
-                            </blockquote>
                             <p class="comment-content"
                                th:text="${comment.getContent()}"></p>
                             <div>
-                                <!--回复评论按钮   -->
-                                <a data-toggle="collapse" th:href="'#collapseExample'+${comment.getId()}" role="button"
-                                   aria-expanded="false" aria-controls="collapseExample">
-                                    <svg class="bi bi-reply" width="1em" height="1em" viewBox="0 0 16 16"
+                                <!--展开二级评论按钮   -->
+                                <a class="sub-comment-button" th:data-target="'#collapseExample'+${comment.getId()}" role="button"
+                                      aria-expanded="false" aria-controls="collapseExample"
+                                      th:data-id="${comment.getId()}"
+                                      onclick="collapseComments(this)">
+                                    <svg class="bi bi-chat-square-dots" width="1em" height="1em" viewBox="0 0 16 16"
                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                              d="M9.502 5.013a.144.144 0 00-.202.134V6.3a.5.5 0 01-.5.5c-.667 0-2.013.005-3.3.822-.984.624-1.99 1.76-2.595 3.876C3.925 10.515 5.09 9.982 6.11 9.7a8.741 8.741 0 011.921-.306 7.403 7.403 0 01.798.008h.013l.005.001h.001L8.8 9.9l.05-.498a.5.5 0 01.45.498v1.153c0 .108.11.176.202.134l3.984-2.933a.494.494 0 01.042-.028.147.147 0 000-.252.494.494 0 01-.042-.028L9.502 5.013zM8.3 10.386a7.745 7.745 0 00-1.923.277c-1.326.368-2.896 1.201-3.94 3.08a.5.5 0 01-.933-.305c.464-3.71 1.886-5.662 3.46-6.66 1.245-.79 2.527-.942 3.336-.971v-.66a1.144 1.144 0 011.767-.96l3.994 2.94a1.147 1.147 0 010 1.946l-3.994 2.94a1.144 1.144 0 01-1.767-.96v-.667z"
-                                              clip-rule="evenodd"/>
+                                      <path fill-rule="evenodd"
+                                            d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z"
+                                            clip-rule="evenodd"/>
+                                      <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
                                     </svg>
-                                    <span style="font-size: 12px;color: #999;line-height: 200%;">回复</span>
+                                    <span style="font-size: 12px;color: #999;line-height: 200%;">查看对话</span>
                                 </a>
-                                <!--回复评论输入框  -->
-                                <div class="collapse" th:id="'collapseExample'+${comment.getId()}">
-                                    <div class="card card-body" style="padding: 10px">
-                                        <div class="input-group mb-3" style="margin-bottom: -16px;">
-                                            <textarea type="text" class="form-control" th:id="'sub-comment-'+${comment.getId()}" placeholder="请输入..."
+
+                                <!--二级评论  -->
+                                <div>
+                                    <div class="collapse" th:id="'collapseExample'+${comment.getId()}">
+
+                                        <!--二级评论输入框-->
+                                        <div class="card card-body" style="padding: 10px"
+                                             th:id="'sub-comment-window'+${comment.getId()}">
+                                            <div class="input-group mb-3" style="margin-bottom: -16px;">
+                                            <textarea type="text" class="form-control"
+                                                      th:id="'sub-comment-'+${comment.getId()}" placeholder="请输入..."
                                                       aria-label="请输入..." aria-describedby="button-addon2"></textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-success" type="button" id="button-addon2" th:data-id="${comment.getId()}" th:data-parent-username="${comment.getUsername()}" th:data-parent-comment-content="${comment.getContent()}"
-                                                        onclick="subComment(this)">回复
-                                                </button>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-success" type="button"
+                                                            id="button-addon2" th:data-id="${comment.getId()}"
+                                                            th:data-parent-username="${comment.getUsername()}"
+                                                            th:data-parent-id="${comment.getParentId()}"
+                                                            th:data-parent-userId="${comment.getUserId()}"
+                                                            th:data-parent-comment-content="${comment.getContent()}"
+                                                            th:data-photo="${session.user.getPhoto()}"
+                                                            th:data-username="${session.user.getUsername()}"
+                                                            th:data-article-id="${question.getQuestionId()}"
+                                                            onclick="subComment(this)">回复
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -173,12 +186,13 @@
                 </div>
                 <!--添加评论-->
 
-                <h3>添加评论</h3>
+                <h3 id="test">添加评论</h3>
                 <div th:if="${session.user!=null}">
                     <div class="form-group">
                         <textarea class="form-control" id="comment-content" name="comment" rows="3"></textarea>
                     </div>
                     <input type="hidden" id="parentId" th:value="${question.getQuestionId()}">
+                    <input type="hidden" id="parentUserId" th:value="${question.getPublisherId()}">
                     <input type="hidden" id="parentType" value="1">
                     <button type="submit" class="btn btn-success" onclick="questionComment()">提交</button>
                 </div>
@@ -201,6 +215,17 @@
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
         // Take the user to a different screen here.
         document.getElementById("content-container").className = "mobile-content-container";
+    }
+
+    function reply(e) {
+        var user = e.getAttribute("data-user")
+
+        var id = e.getAttribute("data-id")
+        document.getElementById("sub-comment-" + id).value = "回复@" + user + ": ";
+        // 将输入框滚动到浏览器视口的最上方
+        $("html,body").animate({scrollTop: $("#sub-comment-window"+id).offset().top-$(window).height() * 0.5}, 500);
+        var subCommentInput=("#sub-comment-"+id);
+
     }
 </script>
 </body>

@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public void insert(CommentCreateDTO commentCreateDTO, Long userId) {
+    public Comment insert(CommentCreateDTO commentCreateDTO, Long userId) {
         // 创建 comment 对象
         CommentWithBLOBs comment = new CommentWithBLOBs();
         comment.setCommentatorId(userId);
@@ -41,10 +41,13 @@ public class CommentServiceImpl implements CommentService {
         comment.setParentContent(commentCreateDTO.getParentContent());
         // 保存数据
         commentMapper.insert(comment);
+        logger.info("评论id={}",comment.getId());
+
         // 将相应帖子的评论数加一
         if (commentCreateDTO.getParentType() == 1) {// 讨论帖
             questionExtMapper.incCommentCount(commentCreateDTO.getParentId());
         }
+        return comment;
     }
 
     /**
@@ -73,8 +76,35 @@ public class CommentServiceImpl implements CommentService {
             commentDTO.setUsername(userInfos.get(0).getUsername()); // 用户名
             commentDTO.setParentUsername(comment.getParentUsername()); // 被回复评论的用户名
             commentDTO.setParentContent(comment.getParentContent()); // 被回复评论的内容
+            commentDTO.setUserId(comment.getCommentatorId());
             commentDTOS.add(commentDTO);
 
+        }
+
+        return commentDTOS;
+
+
+    }
+
+    @Override
+    public List<CommentDTO> listSubComment(Long commentId) {
+        CommentExample commentExample=new CommentExample();
+        commentExample.createCriteria().andParentIdEqualTo(commentId).andTypeEqualTo(2);
+        List<CommentWithBLOBs> comments=commentMapper.selectByExampleWithBLOBs(commentExample);
+
+        List<CommentDTO> commentDTOS=new ArrayList<>();
+
+        for (CommentWithBLOBs comment : comments) {
+            CommentDTO commentDTO=new CommentDTO();
+            BeanUtils.copyProperties(comment,commentDTO);
+            commentDTOS.add(commentDTO);
+
+            UserInfoExample userInfoExample=new UserInfoExample();
+            userInfoExample.createCriteria().andUserIdEqualTo(comment.getCommentatorId());
+            List<UserInfo> userInfos = userInfoMapper.selectByExample(userInfoExample);
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setPhoto(userInfos.get(0).getPhoto()); // 头像
+            commentDTO.setUsername(userInfos.get(0).getUsername()); // 用户名
         }
 
         return commentDTOS;
