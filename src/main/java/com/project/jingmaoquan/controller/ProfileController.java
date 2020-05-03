@@ -28,7 +28,7 @@ public class ProfileController {
         Long userId = userInfo.getUserId();
         if (section == 2) { // 我的讨论帖
             PaginationDTO<Question> paginationDTO = questionService.listByPublisherId(userId, page, size);
-            model.addAttribute("questionPagination", paginationDTO);
+            model.addAttribute("pagination", paginationDTO);
             model.addAttribute("section", section);
         }
         return "profile";

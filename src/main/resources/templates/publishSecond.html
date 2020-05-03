@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>发布讨论帖</title>
+    <title>发布二手帖</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -26,19 +26,26 @@
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
 
-                <form action="/question/publish" method="post" enctype="multipart/form-data">
+                <form action="/second/publish" method="post" enctype="multipart/form-data">
 <!--                    question id-->
-                    <input name="id" th:value="${question!=null?question.getQuestionId():''}" type="text" style="display: none;">
+                    <input name="id" th:value="${second!=null?second.getSecondId():''}" type="text" style="display: none;">
                     <!--                    标题-->
                     <div class="form-group">
                         <label for="question-title">标题</label>
-                        <input type="text" class="form-control" id="question-title" name="title"
-                               th:value="${question!=null?question.getTitle():''}">
+                        <input type="text" class="form-control" id="question-title" name="name"
+                               th:value="${second!=null?second.getName():''}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="question-title">价格</label>
+                        <input type="text" class="form-control" id="second-price" name="price"
+                               th:value="${second!=null?second.getPrice():''}">
+                    </div>
+
                     <div class="form-group">
 
-                        <label for="editor">正文</label>
-                        <textarea name="content" id="editor"  th:text="${question!=null?question.getContent():''}"></textarea>
+                        <label for="editor">详细描述</label>
+                        <textarea name="detail" id="editor"  th:text="${second!=null?second.getDetail():''}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-success" style="float: right">发布</button>
                     <div class="alert alert-danger" role="alert" style="float: right;margin-right: 20px;" th:if="${error!=null}">

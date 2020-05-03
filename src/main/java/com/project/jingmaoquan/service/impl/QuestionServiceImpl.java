@@ -81,6 +81,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public PaginationDTO<Question> listByPublisherId(Long userId, Integer page, Integer size) {
         int offset = size * (page - 1);
+
         // 查询
         QuestionExample questionExample=new QuestionExample();
         questionExample.createCriteria().andPublisherIdEqualTo(userId);

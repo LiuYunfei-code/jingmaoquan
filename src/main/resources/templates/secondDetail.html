@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${question.getTitle()}"></title>
+    <title th:text="${second.getName()}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -31,16 +31,16 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
                 <!--帖子信息-->
                 <div>
-                    <h2 th:text="${question.getTitle()}"></h2>
+                    <h2 th:text="${second.getName()}"></h2>
                     <span class="question-info">发布人:<span
-                            th:text="${question.getUsername()}"></span>&nbsp;|&nbsp;时间:<span
-                            th:text="${#dates.format(question.getPublishTime(),'yyyy-MM-dd HH:mm')}"></span>&nbsp;|&nbsp;浏览量:<span
-                            th:text="${question.getViewCount()}"></span></span>
-                    <a th:if="${question!=null || question.getPublisherId()==session.user.getUserId()}"
-                       th:href="'/question/publishPage?id='+${question.getQuestionId()}" style="color: #4e555b;">编辑</a>
+                            th:text="${second.getPublishUsername()}"></span>&nbsp;|&nbsp;时间:<span
+                            th:text="${#dates.format(second.getPublishTime(),'yyyy-MM-dd HH:mm')}"></span>&nbsp;|&nbsp;浏览量:<span
+                            th:text="${second.getViewCount()}"></span></span>
+                    <a th:if="${second!=null || second.getPublisherId()==session.user.getUserId()}"
+                       th:href="'/second/publishPage?id='+${second.getSecondId()}" style="color: #4e555b;">编辑</a>
                 </div>
                 <hr>
-                <div th:utext="${question.getContent()}" class="ck-content">
+                <div th:utext="${second.getDetail()}" class="ck-content">
                 </div>
                 <!--评论-->
                 <hr>
@@ -62,7 +62,7 @@
                                 <a class="sub-comment-button" th:data-target="'#collapseExample'+${comment.getId()}" role="button"
                                       aria-expanded="false" aria-controls="collapseExample"
                                       th:data-id="${comment.getId()}"
-                                      onclick="collapseComments(this,1)">
+                                      onclick="collapseComments(this,2)">
                                     <svg class="bi bi-chat-square-dots" width="1em" height="1em" viewBox="0 0 16 16"
                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                       <path fill-rule="evenodd"
@@ -93,8 +93,8 @@
                                                             th:data-parent-comment-content="${comment.getContent()}"
                                                             th:data-photo="${session.user.getPhoto()}"
                                                             th:data-username="${session.user.getUsername()}"
-                                                            th:data-article-id="${question.getQuestionId()}"
-                                                            onclick="subComment(this,1)">回复
+                                                            th:data-article-id="${second.getSecondId()}"
+                                                            onclick="subComment(this,2)">回复
                                                     </button>
                                                 </div>
                                             </div>
@@ -114,13 +114,13 @@
                     <div class="form-group">
                         <textarea class="form-control" id="comment-content" name="comment" rows="3"></textarea>
                     </div>
-                    <input type="hidden" id="parentId" th:value="${question.getQuestionId()}">
-                    <input type="hidden" id="parentUserId" th:value="${question.getPublisherId()}">
+                    <input type="hidden" id="parentId" th:value="${second.getSecondId()}">
+                    <input type="hidden" id="parentUserId" th:value="${second.getPublisherId()}">
                     <input type="hidden" id="parentType" value="1">
-                    <button type="submit" class="btn btn-success" onclick="questionComment(1)">提交</button>
+                    <button type="submit" class="btn btn-success" onclick="questionComment(2)">提交</button>
                 </div>
                 <div th:if="${session.user==null}">
-                    <a class="nav-link" th:href="'/loginPage?type=1&id='+${question.getQuestionId()}"
+                    <a class="nav-link" th:href="'/loginPage?type=1&id='+${second.getSecondId()}"
                        th:if="${session.user==null}">请先登录</a>
                 </div>
             </div>

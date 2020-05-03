@@ -36,6 +36,9 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <table schema="jmq" tableName="notification" domainObjectName="Notification" ></table>
+        <table schema="jmq" tableName="second_hand" domainObjectName="Second" >
+            <generatedKey column="second_id" sqlStatement="MySql" identity="true" />
+        </table>
 
     </context>
 </generatorConfiguration>

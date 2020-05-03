@@ -16,73 +16,7 @@
 </head>
 <body>
 <!--导航栏-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" >
-    <a class="navbar-brand" href="/">经贸圈</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">讨论区 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">二手区</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">任务区</a>
-            </li>
-<!--         搜索-->
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2 search-input" type="search" placeholder="搜索讨论帖" aria-label="Search">
-                <button class="btn my-2 my-sm-0 search-button" type="submit"><svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clip-rule="evenodd"/>
-                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clip-rule="evenodd"/>
-                </svg></button>
-            </form>
-        </ul>
-        <!--        已登录-->
-        <div class="btn-group" style="margin: 5px">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${session.user!=null}">
-                <svg class="bi bi-pencil-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd"/>
-                </svg>
-                发帖
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="/question/publishPage">发布讨论帖</a>
-                <a class="dropdown-item" href="#">发布二手贴</a>
-                <a class="dropdown-item" href="#">发布任务贴</a>
-            </div>
-        </div>
-        <div class="btn-group" th:if="${session.user!=null}" style="margin-right: 10px">
-            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                <span th:text="${session.user.getUsername()}"></span>
-            </button>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="/notification">个人中心</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/logout">退出登录</a>
-            </div>
-        </div>
-        <svg class="bi bi-bell" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-             xmlns="http://www.w3.org/2000/svg" style="margin-right: 20px" th:if="${session.user!=null}">
-            <path d="M8 16a2 2 0 002-2H6a2 2 0 002 2z"/>
-            <path fill-rule="evenodd"
-                  d="M8 1.918l-.797.161A4.002 4.002 0 004 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 00-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 111.99 0A5.002 5.002 0 0113 6c0 .88.32 4.2 1.22 6z"
-                  clip-rule="evenodd"/>
-        </svg>
-        <img th:src="${session.user.getPhoto()}" class="rounded-circle" height="40px" width="40px"
-             th:if="${session.user!=null}">
-
-        <!--        未登录-->
-        <a class="nav-link" href="/loginPage" th:if="${session.user==null}">登录</a>
-    </div>
-</nav>
+<div th:replace="~{navigation :: nav}"></div>
 <!--导航栏 END-->
 
 <div class="content-container" id="content-container" style="border-radius: 3px">

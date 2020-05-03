@@ -13,5 +13,5 @@ public interface CommentService {
 
     List<CommentDTO> listByTargetId(Long questionId,Integer parentType);
 
-    List<CommentDTO> listSubComment(Long commentId);
+    List<CommentDTO> listSubComment(Long commentId,Integer articleType);
 }

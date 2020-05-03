@@ -25,7 +25,7 @@ public class COSProvider {
 
     private COSCredentials cred = new BasicCOSCredentials(secretId, secretKey);
     // 2 设置 bucket 的区域, COS 地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
-//   clientConfig 中包含了设置 region, https(默认 http), 超时, 代理等 set 方法, 使用可参见源码或者常见问题 Java SDK 部分。
+    // clientConfig 中包含了设置 region, https(默认 http), 超时, 代理等 set 方法, 使用可参见源码或者常见问题 Java SDK 部分。
     private Region region = new Region("ap-shanghai");
     private ClientConfig clientConfig = new ClientConfig(region);
     // 3 生成 cos 客户端。
@@ -35,9 +35,9 @@ public class COSProvider {
         logger.info("upload");
         // 指定要上传的文件
         File localFile = file;
-//      指定要上传到的存储桶
+        // 指定要上传到的存储桶
         String bucketName = "images-1300052406";
-//      指定要上传到 COS 上对象键
+        // 指定要上传到 COS 上对象键
         String key = UUID.randomUUID() + "." + fileName.split("\\.")[1];
         logger.info("{}", key);
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);

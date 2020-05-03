@@ -7,11 +7,11 @@ function check(e) {
     }
 }
 
-function questionComment() {
+function questionComment(articleType) {
 
     let parentId = $(" #parentId ").val();// 帖子id
     let parentUserId = $(" #parentUserId ").val();// 帖子发布人id
-    let parentType = 1; // 1 代表帖子
+    let parentType = articleType; // 1-讨论帖 2-二手贴
     let commentContent = $(" #comment-content ").val();
     let type = 1;
 
@@ -53,7 +53,7 @@ function questionComment() {
  * 二级评论上传
  * @param e
  */
-function subComment(e) {
+function subComment(e,articleType) {
 
     let id = e.getAttribute("data-id");
     let photo = e.getAttribute("data-photo");
@@ -62,7 +62,7 @@ function subComment(e) {
     let parentUserId = e.getAttribute("data-parent-userId");
     let articleId = e.getAttribute("data-article-id");
     console.log(parentUserId)
-    let parentType = 1; // 1 代表评论贴
+    let parentType = articleType; // 1-讨论贴  2-二手贴
     let commentContent = $(" #sub-comment-" + id).val();
     commentContent = html2Escape(commentContent); // HTML 转普通文本防止代码注入
     let type = 2; // 2 代表二级评论
@@ -152,7 +152,7 @@ function deleteQuestion(e) {
 /**
  * 展开二级评论
  */
-function collapseComments(e) {
+function collapseComments(e,articleType) {
     let id = e.getAttribute("data-id");
     let target = e.getAttribute("data-target")
     let comments = $(target);
@@ -179,7 +179,7 @@ function collapseComments(e) {
             e.classList.add("active");
 
         } else {
-            $.getJSON("/subComment?id=" + id, function (data) {
+            $.getJSON("/subComment?id=" + id+"&articleType="+articleType, function (data) {
                 var len=data.data.length;
                 $.each(data.data.reverse(), function (index, comment) {
 

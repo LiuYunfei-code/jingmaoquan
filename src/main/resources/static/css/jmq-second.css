@@ -1,0 +1,10 @@
+.img img{
+    height: inherit;
+}
+.img{
+    padding: 0;
+}
+.media-body{
+    float: left;
+    padding: 0;
+}

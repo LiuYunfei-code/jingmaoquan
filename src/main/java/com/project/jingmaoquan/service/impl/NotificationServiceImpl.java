@@ -6,6 +6,7 @@ import com.project.jingmaoquan.dto.PaginationDTO;
 import com.project.jingmaoquan.mapper.CommentMapper;
 import com.project.jingmaoquan.mapper.NotificationMapper;
 import com.project.jingmaoquan.mapper.QuestionMapper;
+import com.project.jingmaoquan.mapper.SecondMapper;
 import com.project.jingmaoquan.model.*;
 import com.project.jingmaoquan.service.NotificationService;
 import org.apache.ibatis.session.RowBounds;
@@ -23,6 +24,9 @@ public class NotificationServiceImpl implements NotificationService {
     private QuestionMapper questionMapper;
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private SecondMapper secondMapper;
+
     @Override
     public PaginationDTO<NotificationDTO> list(Long userId, Integer page, Integer size) {
         int offset = size * (page - 1);
@@ -35,14 +39,10 @@ public class NotificationServiceImpl implements NotificationService {
         List<NotificationDTO> notificationDTOList=new ArrayList<>();
 
         for (Notification notification : notifications) {
-            if (notification.getArticleType()==1){ // 讨论帖
+//            if (notification.getArticleType()==1){ // 讨论帖
                 NotificationDTO notificationDTO=new NotificationDTO();
                 BeanUtils.copyProperties(notification,notificationDTO);
-                // 查询标题
-                QuestionExample questionExample=new QuestionExample();
-                questionExample.createCriteria().andQuestionIdEqualTo(notification.getArticleId());
-                List<Question> questions=questionMapper.selectByExampleWithBLOBs(questionExample);
-                notificationDTO.setArticleTitle(questions.get(0).getTitle());
+
 
                 // 查询评论的内容
                 CommentExample commentExample=new CommentExample();
@@ -50,17 +50,37 @@ public class NotificationServiceImpl implements NotificationService {
                 List<CommentWithBLOBs> comments=commentMapper.selectByExampleWithBLOBs(commentExample);
                 notificationDTO.setContent(comments.get(0).getContent());
 
-                // 设置描述
-                if (comments.get(0).getType()==1){
-                    notificationDTO.setNotifyDesc("回复了你的讨论帖");
-                }else if (comments.get(0).getType()==2){
-                    notificationDTO.setNotifyDesc("回复了你在讨论帖中的评论");
-                }
 
+                if (comments.get(0).getParentType()==1) { // 讨论帖
+                    // 查询标题
+                    QuestionExample questionExample=new QuestionExample();
+                    questionExample.createCriteria().andQuestionIdEqualTo(notification.getArticleId());
+                    List<Question> questions=questionMapper.selectByExampleWithBLOBs(questionExample);
+                    notificationDTO.setArticleTitle(questions.get(0).getTitle());
+
+                    // 设置描述
+                    if (comments.get(0).getType() == 1) {
+                        notificationDTO.setNotifyDesc("回复了你的讨论帖");
+                    } else if (comments.get(0).getType() == 2) {
+                        notificationDTO.setNotifyDesc("回复了你在讨论帖中的评论");
+                    }
+                }else if (comments.get(0).getParentType()==2){ // 二手贴
+                    // 查询标题
+                    SecondExample secondExample=new SecondExample();
+                    secondExample.createCriteria().andSecondIdEqualTo(notification.getArticleId());
+                    List<SecondWithBLOBs> secondWithBLOBs = secondMapper.selectByExampleWithBLOBs(secondExample);
+                    notificationDTO.setArticleTitle(secondWithBLOBs.get(0).getName());
+                    // 设置描述
+                    if (comments.get(0).getType() == 1) {
+                        notificationDTO.setNotifyDesc("回复了你的二手帖");
+                    } else if (comments.get(0).getType() == 2) {
+                        notificationDTO.setNotifyDesc("回复了你在二手贴中的评论");
+                    }
+                }
                 notificationDTOList.add(notificationDTO);
 
             }
-        }
+//        }
 
         // 设置分页
         Long totalCount=notificationMapper.countByExample(notificationExample);

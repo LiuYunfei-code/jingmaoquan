@@ -8,7 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
-@Mapper
+
 public interface QuestionExtMapper {
    void incView(Long id);
    void incCommentCount(Long id);

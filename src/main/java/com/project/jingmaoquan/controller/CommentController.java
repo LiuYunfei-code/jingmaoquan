@@ -55,8 +55,9 @@ public class CommentController {
     }
     @RequestMapping("subComment")
     @ResponseBody
-    public ResultDTO getSubComment(@RequestParam("id") Long commentId){
-        List<CommentDTO> commentDTOS=commentService.listSubComment(commentId);
+    public ResultDTO getSubComment(@RequestParam("id") Long commentId,
+                                   @RequestParam("articleType")Integer articleType){
+        List<CommentDTO> commentDTOS=commentService.listSubComment(commentId,articleType);
         return ResultDTO.okOf(commentDTOS);
     }
 }

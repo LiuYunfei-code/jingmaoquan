@@ -87,9 +87,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDTO> listSubComment(Long commentId) {
+    public List<CommentDTO> listSubComment(Long commentId, Integer articleType) {
         CommentExample commentExample=new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(commentId).andTypeEqualTo(2);
+        commentExample.createCriteria().andParentIdEqualTo(commentId).andTypeEqualTo(2).andParentTypeEqualTo(articleType);
         List<CommentWithBLOBs> comments=commentMapper.selectByExampleWithBLOBs(commentExample);
 
         List<CommentDTO> commentDTOS=new ArrayList<>();
