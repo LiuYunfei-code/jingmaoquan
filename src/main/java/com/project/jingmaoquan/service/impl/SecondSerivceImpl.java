@@ -140,4 +140,50 @@ public class SecondSerivceImpl implements SecondService {
 
         return secondWithBLOBs.getSecondId();
     }
+
+    @Override
+    public PaginationDTO<Second> listByPublisherId(Long userId, Integer page, Integer size) {
+        SecondExample secondExample=new SecondExample();
+        secondExample.createCriteria().andPublisherIdEqualTo(userId);
+        secondExample.setOrderByClause("publish_time desc");
+
+        int offset=size*(page-1);
+        List<Second> seconds = secondMapper.selectByExampleWithRowbounds(secondExample,new RowBounds(offset,size));
+
+        PaginationDTO<Second> paginationDTO=new PaginationDTO<>();
+        // 设置分页数据
+        paginationDTO.setData(seconds);
+        // 获取总记录数
+        Long totalCount=secondMapper.countByExample(secondExample);
+        // 设置分页
+        paginationDTO.setPagination(totalCount,page,size);
+
+        return paginationDTO;
+
+    }
+
+    /**
+     * 删除二手贴
+     * @param secondId
+     */
+    @Override
+    public void delete(Long secondId) {
+        SecondExample secondExample=new SecondExample();
+        secondExample.createCriteria().andSecondIdEqualTo(secondId);
+
+        secondMapper.deleteByExample(secondExample);
+    }
+
+    /**
+     * 标记为已售
+     * @param secondId
+     */
+    @Override
+    public void sold(Long secondId) {
+        SecondWithBLOBs second= new SecondWithBLOBs();
+        second.setSecondId(secondId);
+        second.setState(true);
+
+        secondMapper.updateByPrimaryKeySelective(second);
+    }
 }

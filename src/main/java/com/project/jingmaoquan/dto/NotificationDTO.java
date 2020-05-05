@@ -1,6 +1,7 @@
 package com.project.jingmaoquan.dto;
 
 public class NotificationDTO {
+    private Long id;
     private String notifierUsername;
     private String notifyDesc;
     private String articleTitle;
@@ -10,6 +11,14 @@ public class NotificationDTO {
     private Long createTime;
     private Long commentId;
     private Integer state;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Integer getState() {
         return state;

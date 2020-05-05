@@ -136,7 +136,7 @@ function deleteQuestion(e) {
         }),
         success: function (response) {
             console.log(response);
-            if (response.code == 200) {
+            if (response.code === 200) {
                 curr.parentNode.removeChild(curr);
                 alert("删除成功")
             } else {
@@ -146,6 +146,93 @@ function deleteQuestion(e) {
         dataType: "json"
     });
 
+}
+
+/**
+ * 删除二手帖
+ * @param e
+ */
+function deleteSecond(e) {
+    let id = e.getAttribute("data-id");
+    let curr = document.getElementById("profile-second-" + id);
+
+    $.ajax({
+        type: "POST",
+        url: "/second/delete",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": id
+        }),
+        success: function (response) {
+            console.log(response);
+            if (response.code === 200) {
+                curr.parentNode.removeChild(curr);
+                alert("删除成功")
+            } else {
+                alert("删除失败")
+            }
+        },
+        dataType: "json"
+    });
+
+}
+
+/**
+ * 标记二手帖为已售
+ * @param e
+ */
+function sold(e) {
+    let id = e.getAttribute("data-id");
+    let badge = document.getElementById("badge-second-" + id);
+
+    $.ajax({
+        type: "POST",
+        url: "/second/sold",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": id
+        }),
+        success: function (response) {
+            console.log(response);
+            if (response.code === 200) {
+                badge.classList.replace("badge-danger","badge-success");
+                badge.innerText="已售"
+            } else {
+                alert("操作失败，请稍后重试")
+            }
+        },
+        dataType: "json"
+    });
+
+}
+
+/**
+ * 标记通知为已读
+ * @param e
+ */
+function haveRead(e) {
+    let id = e.getAttribute("data-id");
+    let badge = document.getElementById("badge-notification-" + id);
+    if (badge.classList.contains("badge-danger")) {
+        $.ajax({
+            type: "POST",
+            url: "/haveRead",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "id": id
+            }),
+            success: function (response) {
+                console.log(response);
+                if (response.code === 200) {
+                    badge.classList.replace("badge-danger", "badge-success");
+                    badge.innerText = "已读";
+                } else {
+                    alert("操作失败，请稍后重试")
+                }
+            },
+            dataType: "json"
+        });
+    }
 }
 
 

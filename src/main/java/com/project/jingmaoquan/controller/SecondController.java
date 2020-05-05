@@ -1,18 +1,15 @@
 package com.project.jingmaoquan.controller;
 
-import com.project.jingmaoquan.dto.CommentDTO;
-import com.project.jingmaoquan.dto.PaginationDTO;
-import com.project.jingmaoquan.dto.SecondDTO;
-import com.project.jingmaoquan.model.SecondWithBLOBs;
-import com.project.jingmaoquan.model.UserInfo;
+import com.project.jingmaoquan.dto.*;
+import com.project.jingmaoquan.mapper.SecondMapper;
+import com.project.jingmaoquan.model.*;
 import com.project.jingmaoquan.service.CommentService;
 import com.project.jingmaoquan.service.SecondService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,6 +19,8 @@ public class SecondController {
 
     @Autowired
     private SecondService secondService;
+    @Autowired
+    private SecondMapper secondMapper;
     @Autowired
     private CommentService commentService;
 
@@ -112,5 +111,51 @@ public class SecondController {
         return "redirect:/second?id="+secondId;
 
     }
+    /**
+     * 删除二手帖
+     *
+     * @param secondRequestDTO
+     * @return
+     */
+    @RequestMapping(value = "second/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Object delete(@RequestBody SecondRequestDTO secondRequestDTO, HttpServletRequest request) {
 
+        UserInfo userInfo = (UserInfo) request.getSession().getAttribute("user");
+        // 查询帖子发布人的id
+        SecondExample secondExample=new SecondExample();
+        secondExample.createCriteria().andSecondIdEqualTo(secondRequestDTO.getId());
+        List<Second> seconds = secondMapper.selectByExample(secondExample);
+        Long publisherId = seconds.get(0).getPublisherId();
+
+        if (userInfo == null) { // 未登录
+        } else if (publisherId.equals(userInfo.getUserId())) { // 要删除的帖子的发布人和当前用户id相同才能删除
+            secondService.delete(secondRequestDTO.getId());
+        }
+        return ResultDTO.okOf();
+    }
+
+    /**
+     * 标记为已售
+     *
+     * @param secondRequestDTO
+     * @return
+     */
+    @RequestMapping(value = "second/sold", method = RequestMethod.POST)
+    @ResponseBody
+    public Object sold(@RequestBody SecondRequestDTO secondRequestDTO, HttpServletRequest request) {
+
+        UserInfo userInfo = (UserInfo) request.getSession().getAttribute("user");
+        // 查询帖子发布人的id
+        SecondExample secondExample=new SecondExample();
+        secondExample.createCriteria().andSecondIdEqualTo(secondRequestDTO.getId());
+        List<Second> seconds = secondMapper.selectByExample(secondExample);
+        Long publisherId = seconds.get(0).getPublisherId();
+
+        if (userInfo == null) { // 未登录
+        } else if (publisherId.equals(userInfo.getUserId())) { // 要标记的帖子的发布人和当前用户id相同才能标记
+            secondService.sold(secondRequestDTO.getId());
+        }
+        return ResultDTO.okOf();
+    }
 }

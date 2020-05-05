@@ -1,6 +1,6 @@
 package com.project.jingmaoquan.dto;
 
-public class DeleteDTO {
+public class QuestionRequestDTO {
     private Long id;
 
     public Long getId() {

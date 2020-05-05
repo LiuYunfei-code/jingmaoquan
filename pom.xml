@@ -70,6 +70,13 @@
             <artifactId>cos_api</artifactId>
             <version>5.6.18</version>
         </dependency>
+        <!-- jasypt-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
 
     </dependencies>
 

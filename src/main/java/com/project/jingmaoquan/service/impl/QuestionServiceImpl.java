@@ -89,6 +89,7 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions=questionMapper.selectByExampleWithRowbounds(questionExample,new RowBounds(offset,size));
 
         PaginationDTO<Question> paginationDTO=new PaginationDTO<>();
+        // 设置分页数据
         paginationDTO.setData(questions);
         // 获取总记录数
         Long totalCount=questionMapper.countByExample(new QuestionExample());
@@ -99,6 +100,10 @@ public class QuestionServiceImpl implements QuestionService {
 
     }
 
+    /**
+     * 删除讨论帖
+     * @param questionId
+     */
     @Override
     public void delete(Long questionId) {
         QuestionExample questionExample=new QuestionExample();

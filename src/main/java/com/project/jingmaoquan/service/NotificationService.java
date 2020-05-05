@@ -14,4 +14,6 @@ public interface NotificationService {
 
 
     void createCommentNotification(CommentCreateDTO commentCreateDTO, UserInfo userInfo, Comment comment);
+
+    void haveRead(Long notificationId);
 }

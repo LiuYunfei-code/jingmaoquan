@@ -3,8 +3,10 @@ package com.project.jingmaoquan.controller;
 import com.project.jingmaoquan.dto.PaginationDTO;
 import com.project.jingmaoquan.dto.QuestionDTO;
 import com.project.jingmaoquan.model.Question;
+import com.project.jingmaoquan.model.Second;
 import com.project.jingmaoquan.model.UserInfo;
 import com.project.jingmaoquan.service.QuestionService;
+import com.project.jingmaoquan.service.SecondService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import java.util.List;
 public class ProfileController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private SecondService secondService;
 
     @RequestMapping("profile")
     public String profilePage(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
@@ -30,6 +34,11 @@ public class ProfileController {
             PaginationDTO<Question> paginationDTO = questionService.listByPublisherId(userId, page, size);
             model.addAttribute("pagination", paginationDTO);
             model.addAttribute("section", section);
+        }else if (section==3){ // 我的二手贴
+            PaginationDTO<Second> paginationDTO=secondService.listByPublisherId(userId,page,size);
+            model.addAttribute("pagination",paginationDTO);
+            model.addAttribute("section",section);
+
         }
         return "profile";
     }
