@@ -22,8 +22,8 @@
 <div class="content-container" id="content-container" style="border-radius: 3px">
     <!--文章列表-->
     <div class="container-fluid ">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9" style="border-right:solid 1px #EFEFEF ">
+        <div class="row shadow-sm rounded">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 row-left" style="border-right:solid 1px #EFEFEF ">
 <!--                通知-->
                 <ul class="list-group list-group-flush" th:if="${section==1}">
                     <li class="list-group-item" th:each="notification:${pagination.getData()}" >
@@ -36,7 +36,14 @@
                         </div>
 <!--                        评论贴-->
                         <div class="media-body" th:if="${notification.getArticleType()==2}">
-                            <h5 class="mt-0 mb-1"><span style="margin-right: 5px" th:class="${notification.getState()==0}?'badge badge-danger':'badge badge-success'" th:text="${notification.getState()==0}?'未读':'已读'" ></span>&nbsp;<span th:text="'@'+${notification.getNotifierUsername()}+'  '+${notification.getNotifyDesc()}+'  '"></span><a class="list-title" target="_blank" th:href="'/second?id='+${notification.getArticleId()}+'#comment-'+${notification.getCommentId()}" th:text="${notification.getArticleTitle()}"></a></h5>
+                            <h5 class="mt-0 mb-1"><span style="margin-right: 5px" th:id="'badge-notification-'+${notification.getId()}"  th:class="${notification.getState()==0}?'badge badge-danger':'badge badge-success'" th:text="${notification.getState()==0}?'未读':'已读'" ></span>&nbsp;<span th:text="'@'+${notification.getNotifierUsername()}+'  '+${notification.getNotifyDesc()}+'  '"></span><a class="list-title" target="_blank" th:href="'/second?id='+${notification.getArticleId()}+'#comment-'+${notification.getCommentId()}" th:text="${notification.getArticleTitle()}" th:data-id="${notification.getId()}" onclick="haveRead(this)"></a></h5>
+                            <span th:utext="${notification.getContent()}" style="font-size: 15px;color: #555"></span><br>
+                            <span class="list-info"><span  th:text="${#dates.format(notification.getCreateTime(),'yyyy-MM-dd HH:mm')}"></span>  </span>
+                            <button class="btn btn-link" style="float: right;margin: 0 10px 0 0 ;font-weight:bold; padding: 0px;font-size: 15px;color: #218838;" onclick="haveRead(this)" th:data-id="${notification.getId()}">标记为已读</button>
+                        </div>
+                        <!--任务贴-->
+                        <div class="media-body" th:if="${notification.getArticleType()==3}">
+                            <h5 class="mt-0 mb-1"><span style="margin-right: 5px" th:id="'badge-notification-'+${notification.getId()}" th:class="${notification.getState()==0}?'badge badge-danger':'badge badge-success'" th:text="${notification.getState()==0}?'未读':'已读'" ></span>&nbsp;<span th:text="'@'+${notification.getNotifierUsername()}+'  '+${notification.getNotifyDesc()}+'  '"></span><a class="list-title" target="_blank" th:href="'/task?id='+${notification.getArticleId()}+'#comment-'+${notification.getCommentId()}" th:text="${notification.getArticleTitle()}" th:data-id="${notification.getId()}" onclick="haveRead(this)"></a></h5>
                             <span th:utext="${notification.getContent()}" style="font-size: 15px;color: #555"></span><br>
                             <span class="list-info"><span  th:text="${#dates.format(notification.getCreateTime(),'yyyy-MM-dd HH:mm')}"></span>  </span>
                             <button class="btn btn-link" style="float: right;margin: 0 10px 0 0 ;font-weight:bold; padding: 0px;font-size: 15px;color: #218838;" onclick="haveRead(this)" th:data-id="${notification.getId()}">标记为已读</button>
@@ -67,6 +74,7 @@
                         </div>
                     </li>
                 </ul>
+
                 <!--                分页-->
                 <nav aria-label="Page navigation example" style="margin-top: 5px" th:if="${pagination.getTotalPage()>0}">
                     <ul class="pagination">
@@ -103,7 +111,7 @@
             </div>
             <!--            右侧栏-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
-                <div class="list-group">
+                <div class="list-group" >
                     <a href="/notification?section=1" th:class="${section==1}?'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">
                         通知
                     </a>

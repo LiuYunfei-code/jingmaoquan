@@ -23,6 +23,11 @@ nav{
 .row{
     padding: 5px;
 }
+.row-left{
+    border-right:solid 1px #EFEFEF ;
+    padding-left: 0;
+    padding-right: 0;
+}
 .list-info{
     font-size: 12px;
     color: #aaa;

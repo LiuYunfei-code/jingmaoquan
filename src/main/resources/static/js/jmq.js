@@ -11,7 +11,7 @@ function questionComment(articleType) {
 
     let parentId = $(" #parentId ").val();// 帖子id
     let parentUserId = $(" #parentUserId ").val();// 帖子发布人id
-    let parentType = articleType; // 1-讨论帖 2-二手贴
+    let parentType = articleType; // 1-讨论帖 2-二手贴 3-任务贴
     let commentContent = $(" #comment-content ").val();
     let type = 1;
 
@@ -53,7 +53,7 @@ function questionComment(articleType) {
  * 二级评论上传
  * @param e
  */
-function subComment(e,articleType) {
+function subComment(e, articleType) {
 
     let id = e.getAttribute("data-id");
     let photo = e.getAttribute("data-photo");
@@ -126,26 +126,27 @@ function subComment(e,articleType) {
 function deleteQuestion(e) {
     let id = e.getAttribute("data-id");
     let curr = document.getElementById("profile-question-" + id);
+    if (confirm("删除后不可恢复，确认删除吗？")) {
 
-    $.ajax({
-        type: "POST",
-        url: "/question/delete",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "id": id
-        }),
-        success: function (response) {
-            console.log(response);
-            if (response.code === 200) {
-                curr.parentNode.removeChild(curr);
-                alert("删除成功")
-            } else {
-                alert("删除失败")
-            }
-        },
-        dataType: "json"
-    });
-
+        $.ajax({
+            type: "POST",
+            url: "/question/delete",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "id": id
+            }),
+            success: function (response) {
+                console.log(response);
+                if (response.code === 200) {
+                    curr.parentNode.removeChild(curr);
+                    alert("删除成功")
+                } else {
+                    alert("删除失败")
+                }
+            },
+            dataType: "json"
+        });
+    }
 }
 
 /**
@@ -155,26 +156,28 @@ function deleteQuestion(e) {
 function deleteSecond(e) {
     let id = e.getAttribute("data-id");
     let curr = document.getElementById("profile-second-" + id);
+    if (confirm("删除后不可恢复，确认删除吗？")) {
 
-    $.ajax({
-        type: "POST",
-        url: "/second/delete",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "id": id
-        }),
-        success: function (response) {
-            console.log(response);
-            if (response.code === 200) {
-                curr.parentNode.removeChild(curr);
-                alert("删除成功")
-            } else {
-                alert("删除失败")
-            }
-        },
-        dataType: "json"
-    });
+        $.ajax({
+            type: "POST",
+            url: "/second/delete",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "id": id
+            }),
+            success: function (response) {
+                console.log(response);
+                if (response.code === 200) {
+                    curr.parentNode.removeChild(curr);
+                    alert("删除成功")
+                } else {
+                    alert("删除失败")
+                }
+            },
+            dataType: "json"
+        });
 
+    }
 }
 
 /**
@@ -184,26 +187,26 @@ function deleteSecond(e) {
 function sold(e) {
     let id = e.getAttribute("data-id");
     let badge = document.getElementById("badge-second-" + id);
-
-    $.ajax({
-        type: "POST",
-        url: "/second/sold",
-        contentType: "application/json",
-        data: JSON.stringify({
-            "id": id
-        }),
-        success: function (response) {
-            console.log(response);
-            if (response.code === 200) {
-                badge.classList.replace("badge-danger","badge-success");
-                badge.innerText="已售"
-            } else {
-                alert("操作失败，请稍后重试")
-            }
-        },
-        dataType: "json"
-    });
-
+    if (badge.classList.contains("badge-danger")) {
+        $.ajax({
+            type: "POST",
+            url: "/second/sold",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "id": id
+            }),
+            success: function (response) {
+                console.log(response);
+                if (response.code === 200) {
+                    badge.classList.replace("badge-danger", "badge-success");
+                    badge.innerText = "已售"
+                } else {
+                    alert("操作失败，请稍后重试")
+                }
+            },
+            dataType: "json"
+        });
+    }
 }
 
 /**
@@ -239,7 +242,7 @@ function haveRead(e) {
 /**
  * 展开二级评论
  */
-function collapseComments(e,articleType) {
+function collapseComments(e, articleType) {
     let id = e.getAttribute("data-id");
     let target = e.getAttribute("data-target")
     let comments = $(target);
@@ -266,8 +269,8 @@ function collapseComments(e,articleType) {
             e.classList.add("active");
 
         } else {
-            $.getJSON("/subComment?id=" + id+"&articleType="+articleType, function (data) {
-                var len=data.data.length;
+            $.getJSON("/subComment?id=" + id + "&articleType=" + articleType, function (data) {
+                var len = data.data.length;
                 $.each(data.data.reverse(), function (index, comment) {
 
                     comments.prepend(" <div class=\"media\">\n" +
@@ -278,7 +281,7 @@ function collapseComments(e,articleType) {
                         "                                                    <span style=\"font-weight: bold;color: gray\"\n" +
                         "                                                          >" + comment.username + "</span>&nbsp;&nbsp;\n" +
                         "                                                    <span style=\"font-size: 12px;color: #999;line-height: 200%;\"\n" +
-                        "                                                          >" + moment(comment.createTime).format('YYYY-MM-DD hh:mm') + "</span>\n" +"<span style=\"font-weight: bold;font-size: 12px;color: gray\">&nbsp;&nbsp;"+len+"#</span>"+
+                        "                                                          >" + moment(comment.createTime).format('YYYY-MM-DD hh:mm') + "</span>\n" + "<span style=\"font-weight: bold;font-size: 12px;color: gray\">&nbsp;&nbsp;" + len + "#</span>" +
                         "                                                </p>\n" +
                         "                                                <p class=\"comment-content\"\n" +
                         "                                                   >" + comment.content + "</p>\n" +
@@ -287,7 +290,7 @@ function collapseComments(e,articleType) {
                         "                                                      data-user=\"" + comment.username + "\">回复</span>\n" +
                         "                                            </div>\n" +
                         "                                        </div>");
-                    len=len-1;
+                    len = len - 1;
                 });
             });
             //展开二级评论

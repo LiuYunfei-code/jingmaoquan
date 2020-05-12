@@ -39,6 +39,12 @@
         <table schema="jmq" tableName="second_hand" domainObjectName="Second" >
             <generatedKey column="second_id" sqlStatement="MySql" identity="true" />
         </table>
+        <table schema="jmq" tableName="task" domainObjectName="Task" >
+            <generatedKey column="task_id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table schema="jmq" tableName="message" domainObjectName="Message" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
 
     </context>
 </generatorConfiguration>

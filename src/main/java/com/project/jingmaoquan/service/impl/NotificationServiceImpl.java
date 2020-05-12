@@ -3,10 +3,7 @@ package com.project.jingmaoquan.service.impl;
 import com.project.jingmaoquan.dto.CommentCreateDTO;
 import com.project.jingmaoquan.dto.NotificationDTO;
 import com.project.jingmaoquan.dto.PaginationDTO;
-import com.project.jingmaoquan.mapper.CommentMapper;
-import com.project.jingmaoquan.mapper.NotificationMapper;
-import com.project.jingmaoquan.mapper.QuestionMapper;
-import com.project.jingmaoquan.mapper.SecondMapper;
+import com.project.jingmaoquan.mapper.*;
 import com.project.jingmaoquan.model.*;
 import com.project.jingmaoquan.service.NotificationService;
 import org.apache.ibatis.session.RowBounds;
@@ -27,6 +24,8 @@ public class NotificationServiceImpl implements NotificationService {
     private CommentMapper commentMapper;
     @Autowired
     private SecondMapper secondMapper;
+    @Autowired
+    private TaskMapper taskMapper;
 
     @Override
     public PaginationDTO<NotificationDTO> list(Long userId, Integer page, Integer size) {
@@ -62,7 +61,7 @@ public class NotificationServiceImpl implements NotificationService {
 
                 // 设置描述
                 if (comments.get(0).getType() == 1) {
-                    notificationDTO.setNotifyDesc("回复了你的讨论帖");
+                    notificationDTO.setNotifyDesc("评论了你的讨论帖");
                 } else if (comments.get(0).getType() == 2) {
                     notificationDTO.setNotifyDesc("回复了你在讨论帖中的评论");
                 }
@@ -74,9 +73,21 @@ public class NotificationServiceImpl implements NotificationService {
                 notificationDTO.setArticleTitle(secondWithBLOBs.get(0).getName());
                 // 设置描述
                 if (comments.get(0).getType() == 1) {
-                    notificationDTO.setNotifyDesc("回复了你的二手帖");
+                    notificationDTO.setNotifyDesc("评论了你的二手帖");
                 } else if (comments.get(0).getType() == 2) {
                     notificationDTO.setNotifyDesc("回复了你在二手贴中的评论");
+                }
+            }else if (comments.get(0).getParentType() == 3) {// 任务贴
+                // 查询标题
+                TaskExample taskExample = new TaskExample();
+                taskExample.createCriteria().andTaskIdEqualTo(notification.getArticleId());
+                List<Task> tasks =taskMapper.selectByExampleWithBLOBs(taskExample);
+                notificationDTO.setArticleTitle(tasks.get(0).getTaskName());
+                // 设置描述
+                if (comments.get(0).getType() == 1) {
+                    notificationDTO.setNotifyDesc("评论了你的任务帖");
+                } else if (comments.get(0).getType() == 2) {
+                    notificationDTO.setNotifyDesc("回复了你在任务贴中的评论");
                 }
             }
             notificationDTOList.add(notificationDTO);

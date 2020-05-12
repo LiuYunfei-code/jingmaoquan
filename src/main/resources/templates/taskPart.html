@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>任务区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="/css/jmq.css">
+    <link rel="stylesheet" href="/css/jmq-second.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jmq.js"></script>
+
+</head>
+<body>
+<!--导航栏-->
+<div th:replace="~{navigation :: nav}"></div>
+<!--导航栏 END-->
+
+<div class="content-container" id="content-container" style="border-radius: 3px">
+    <!--文章列表-->
+    <div class="container-fluid">
+        <div class="row shadow-sm rounded">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 row-left"
+                 style="border-right:solid 1px #EFEFEF ">
+                <ul class="list-unstyled">
+                    <div>
+                        <ul class="list-unstyled">
+                            <div th:each="task:${pagination.getData()}" >
+                                <li class="media" style="padding: 5px;transform: rotate(0);">
+                                    <div class="media-body">
+                                        <a th:href="'/task?id='+${task.getTaskId()}" class="stretched-link"> <h5 class="mt-0 mb-1" style="font-weight: bold" th:text="${task.getTaskName()}"></h5></a>
+                                        <span class="badge badge-light" style="color: #4d5256;font-weight: bold;">悬赏：¥
+                                        <span style="color: #ed462f;font-weight: 700;font-size: 15px;"
+                                              th:text="${task.getMoney()}"></span>
+                                    </span>
+                                        <h6 class="d-inline">
+                                            <span th:if="${task.getState()==0}" class="badge badge-danger">未完成</span>
+                                            <span th:if="${task.getState()==1}" class="badge badge-warning">已接单</span>
+                                            <span th:if="${task.getState()==2}" class="badge badge-success">已完成</span>
+                                            <span style="color:#777;font-size: 12px;" >2020-2-2</span>
+                                        </h6>
+                                        <br>
+                                        <span style="color:#777" th:text="${task.getDesc()}"></span>
+
+
+
+                                    </div>
+                                </li>
+                                <hr>
+                            </div>
+                        </ul>
+
+                    </div>
+
+
+                </ul>
+                <!--分页-->
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                <!--                        第一页-->
+                                                        <li class="page-item" th:if="${pagination.showFirstPage}">
+                                                            <a class="page-link" href="/taskPart?page=1" aria-label="Previous">
+                                                                <span aria-hidden="true">&lt;&lt;</span>
+                                                            </a>
+                                                        </li>
+                                <!--                        上一页-->
+                                                        <li class="page-item" th:if="${pagination.showPrevious}">
+                                                            <a class="page-link" th:href="'/taskPart?page='+${pagination.page - 1}" aria-label="Previous">
+                                                                <span aria-hidden="true">&lt;</span>
+                                                            </a>
+                                                        </li>
+                                <!--                        各个页数-->
+                                                        <li th:each="page : ${pagination.pages}" th:class="${pagination.page==page}? 'page-item active' : ''"><a class="page-link" th:href="'/taskPart?page='+${page}" th:text="${page}">1</a></li>
+
+
+                                <!--                        下一页-->
+                                                        <li class="page-item" th:if="${pagination.showNext}">
+                                                            <a class="page-link" th:href="'/taskPart?page='+${pagination.page + 1}" aria-label="Next">
+                                                                <span aria-hidden="true">&gt;</span>
+                                                            </a>
+                                                        </li>
+                                <!--                        最后一页-->
+                                                        <li class="page-item" th:if="${pagination.showNext}">
+                                                            <a class="page-link" th:href="'/taskPart?page='+${pagination.totalPage}" aria-label="Next">
+                                                                <span aria-hidden="true">&gt;&gt;</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+            </div>
+            <!--            右侧栏-->
+            <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                right
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    if (/Android|webOS|iPhone|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+        // Take the user to a different screen here.
+        document.getElementById("content-container").className = "mobile-content-container";
+        // let images = document.getElementsByClassName("img");
+        // for (let imagesElement of images) {
+        //     imagesElement.style.visibility = "hidden"
+        // }
+        // let mBody = document.getElementsByClassName("media-body");
+        // for (let mBodyElement of mBody) {
+        //     mBodyElement.style.height = "53.6px";
+        // }
+        // window.location.replace("/secondPart?device=1"); // 1 代表手机
+    }
+
+</script>
+</body>
+</html>

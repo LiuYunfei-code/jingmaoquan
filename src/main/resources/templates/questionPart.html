@@ -21,9 +21,9 @@
 
 <div class="content-container" id="content-container" style="border-radius: 3px">
     <!--文章列表-->
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
+    <div class="container-fluid ">
+        <div class="row shadow-sm rounded">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10 row-left" >
                 <ul class="list-unstyled">
                     <div th:each="question : ${pagination.data}">
                     <li class="media list-body" >

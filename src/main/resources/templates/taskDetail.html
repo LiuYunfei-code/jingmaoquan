@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${second.getName()}"></title>
+    <title th:text="${task.getTaskName()}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -26,21 +26,28 @@
 
 <div class="content-container" id="content-container">
     <!--    文章主体-->
-    <div class="container-fluid ">
+    <div class="container-fluid">
         <div class="row shadow-sm rounded">
             <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" style="border-right:solid 1px #EFEFEF ">
                 <!--帖子信息-->
                 <div>
-                    <h2 th:text="${second.getName()}"></h2>
+                    <h2 th:text="${task.getTaskName()}"></h2>
+                    <span class="badge badge-light" style="color: #4d5256;font-weight: bold;">悬赏：¥
+                        <span style="color: #ed462f;font-weight: 700;font-size: 15px;" th:text="${task.getMoney()}"></span>
+                    </span>
                     <span class="question-info">发布人:<span
-                            th:text="${second.getPublishUsername()}"></span>&nbsp;|&nbsp;时间:<span
-                            th:text="${#dates.format(second.getPublishTime(),'yyyy-MM-dd HH:mm')}"></span>&nbsp;|&nbsp;浏览量:<span
-                            th:text="${second.getViewCount()}"></span></span>
-                    <a th:if="${second!=null || second.getPublisherId()==session.user.getUserId()}"
-                       th:href="'/second/publishPage?id='+${second.getSecondId()}" style="color: #4e555b;">编辑</a>
+                            th:text="${task.userInfo.getUsername()}"></span>&nbsp;|&nbsp;时间:<span
+                            th:text="${#dates.format(task.getCreateTime(),'yyyy-MM-dd HH:mm')}"></span>&nbsp;</span></span>
+
+                    <button type="button" class="btn"
+                            style="background-color: #ff5e15;color: white;padding: 0 5px 0 5px"
+                            th:if="${task.getState()==0}">接单</button>
+                    <a th:if="${task!=null || task.getPublisherId()==session.user.getUserId()}"
+                       th:href="'/task/publishPage?id='+${task.getTaskId()}"
+                       style="color: #4e555b;float: right;margin-top:4px;">编辑</a>
                 </div>
                 <hr>
-                <div th:utext="${second.getDetail()}" class="ck-content">
+                <div th:utext="${task.getDetail()}" class="ck-content">
                 </div>
                 <!--评论-->
                 <hr>
@@ -59,16 +66,17 @@
                                th:text="${comment.getContent()}"></p>
                             <div>
                                 <!--展开二级评论按钮   -->
-                                <a class="sub-comment-button" th:data-target="'#collapseExample'+${comment.getId()}" role="button"
-                                      aria-expanded="false" aria-controls="collapseExample"
-                                      th:data-id="${comment.getId()}"
-                                      onclick="collapseComments(this,2)">
+                                <a class="sub-comment-button" th:data-target="'#collapseExample'+${comment.getId()}"
+                                   role="button"
+                                   aria-expanded="false" aria-controls="collapseExample"
+                                   th:data-id="${comment.getId()}"
+                                   onclick="collapseComments(this,3)">
                                     <svg class="bi bi-chat-square-dots" width="1em" height="1em" viewBox="0 0 16 16"
                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                      <path fill-rule="evenodd"
-                                            d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z"
-                                            clip-rule="evenodd"/>
-                                      <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+                                        <path fill-rule="evenodd"
+                                              d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z"
+                                              clip-rule="evenodd"/>
+                                        <path d="M5 6a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
                                     </svg>
                                     <span style="font-size: 12px;color: #999;line-height: 200%;">查看对话</span>
                                 </a>
@@ -93,8 +101,8 @@
                                                             th:data-parent-comment-content="${comment.getContent()}"
                                                             th:data-photo="${session.user.getPhoto()}"
                                                             th:data-username="${session.user.getUsername()}"
-                                                            th:data-article-id="${second.getSecondId()}"
-                                                            onclick="subComment(this,2)">回复
+                                                            th:data-article-id="${task.getTaskId()}"
+                                                            onclick="subComment(this,3)">回复
                                                     </button>
                                                 </div>
                                             </div>
@@ -114,13 +122,13 @@
                     <div class="form-group">
                         <textarea class="form-control" id="comment-content" name="comment" rows="3"></textarea>
                     </div>
-                    <input type="hidden" id="parentId" th:value="${second.getSecondId()}">
-                    <input type="hidden" id="parentUserId" th:value="${second.getPublisherId()}">
+                    <input type="hidden" id="parentId" th:value="${task.getTaskId()}">
+                    <input type="hidden" id="parentUserId" th:value="${task.getPublisherId()}">
                     <input type="hidden" id="parentType" value="1">
-                    <button type="submit" class="btn btn-success" onclick="questionComment(2)">提交</button>
+                    <button type="submit" class="btn btn-success" onclick="questionComment(3)">提交</button>
                 </div>
                 <div th:if="${session.user==null}">
-                    <a class="nav-link" th:href="'/loginPage?type=1&id='+${second.getSecondId()}"
+                    <a class="nav-link" th:href="'/loginPage?type=3&id='+${task.getTaskId()}"
                        th:if="${session.user==null}">请先登录</a>
                 </div>
             </div>
@@ -146,8 +154,8 @@
         var id = e.getAttribute("data-id")
         document.getElementById("sub-comment-" + id).value = "回复@" + user + ": ";
         // 将输入框滚动到浏览器视口的最上方
-        $("html,body").animate({scrollTop: $("#sub-comment-window"+id).offset().top-$(window).height() * 0.5}, 500);
-        var subCommentInput=("#sub-comment-"+id);
+        $("html,body").animate({scrollTop: $("#sub-comment-window" + id).offset().top - $(window).height() * 0.5}, 500);
+        var subCommentInput = ("#sub-comment-" + id);
 
     }
 </script>
