@@ -2,6 +2,6 @@
   "name": "jingmaoquan",
   "version": "1.0.0",
   "dependencies": {
-    "@ckeditor/ckeditor5-ckfinder": "^18.0.0"
+    "@ckeditor/ckeditor5-ckfinder": "^38.1.1"
   }
 }
